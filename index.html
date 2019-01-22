@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>Insert title here</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
+<script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+<script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+
+</head>
+<body>
+	<div data-role="panel" id="left" data-dismissible="false" data-display="overlay"> 
+		  <h1>Panels 페이지</h1>
+		  <div data-role="content" class="leftMenu">			
+			<ul data-role="listview" >
+				<li data-role="list=divider">내부도메인</li>
+				<li><a href="NewFile.html" data-transition="slide">같은 내부 페이지</a></li>				
+			</ul>
+		  </div>
+		  <div>
+		  	<p><a href="#header" data-role="button" data-icon="delete" data-rel="close">닫기</a></p>
+		  </div>
+	</div>
+	
+	
+	<div data-role="header" id="page" >
+		<a href="#left" data-role="button" data-icon="bars" data-ajax="false" class="ui-btn-left" data-iconpos="left" data-inline="true">메뉴</a>
+		<a href="http://parkminkyu.github.io/jqmobile/" data-role="button" data-icon="home">HOME</a>		
+		<h1>Panels 페이지</h1>
+	
+		<div data-role="navbar" data-iconpos="top">
+		  <ul>
+			<li><a href="#left">left Panels</a></li>
+			<li><a href="#right">right Panels</a></li>
+			<li><a href="#fixed">fixed Panels</a></li>
+			<li><a href="#overlay">overlay Panels</a></li>
+		  </ul>
+		</div>
+	</div>	
+	
+	<form>
+			<fieldset data-role="controlgroup" data-type="horizontal">
+				<input type="radio" name="rdoType" id="rdoType1" value="on" checked="checked">
+				<label for="rdoType1">주택</label>
+				<input type="radio" name="rdoType" id="rdoType2" value="off">
+				<label for="rdoType2">비사업용토지</label>
+				<input type="radio" name="rdoType" id="rdoType3" value="other">
+				<label for="rdoType3">기타부동산</label>
+			</fieldset>
+		</form>	
+	
+		<div>
+		<form>
+			<fieldset data-role="controlgroup" data-type="horizontal">
+				<input type="radio" name="rdoNum" id="rdoNum1" value="on" checked="checked">
+				<label for="rdoNum1">1주택</label>
+				<input type="radio" name="rdoNum" id="rdoNum2" value="off">
+				<label for="rdoNum2">2주택</label>
+				<input type="radio" name="rdoNum" id="rdoNum3" value="other">
+				<label for="rdoNum3">2주택 이상</label>
+			</fieldset>
+	
+			<fieldset data-role="controlgroup" data-type="horizontal">
+				<input type="checkbox" name="chkEtc" id="chkEtc1" value="off">
+				<label for="chkEtc1">조정대상지역</label>
+				<input type="checkbox" name="chkEtc" id="chkEtc2" value="off">
+				<label for="chkEtc2">2년실거주</label>
+				<input type="checkbox" name="chkEtc" id="chkEtc3" value="off">
+				<label for="chkEtc3">임대사업자</label>				
+			</fieldset>
+	
+			<label>
+				<input type="checkbox" name="chkJnTn">공동명의
+			</label>
+		</form>
+		</div>
+		
+		<form>
+		     <label for="number-pattern">취득가액</label>
+			 <input type="number" name="number" pattern="[0-9]*" id="number-pattern" value="">	
+			 <label for="number-pattern">양도가액</label>
+			 <input type="number" name="number" pattern="[0-9]*" id="number-pattern" value="">
+			 <label for="number-pattern">소요경비</label>
+			 <input type="number" name="number" pattern="[0-9]*" id="number-pattern" value="">
+			 <label for="date">취득일자</label>
+			 <input type="date" name="date" id="date" value="">
+			 <label for="date">양도일자</label>
+			 <input type="date" name="date" id="date" value="">			 
+		</form>
+		
+		<div>
+			<a href="#" data-role="button" data-icon="arrow-r">양도소득세계산</a>	
+		</div>
+	
+		<div data-role="footer">
+			<h2>Footer 입니다.</h2>
+		</div>
+	
+	
+</body>
+</html>
