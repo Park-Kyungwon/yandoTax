@@ -7,7 +7,7 @@
 <link rel="stylesheet" href="jQueryMobile/jquery.mobile-1.4.5.min.css" />
 <script src="jQueryMobile/jquery-1.11.1.min.js"></script>
 <script src="jQueryMobile/jquery.mobile-1.4.5.min.js"></script>
-
+<script src="js/calcYando.js"></script>
 </head>
 <body>
 	<div data-role="panel" id="left" data-dismissible="false" data-display="overlay"> 
@@ -21,8 +21,7 @@
 		  <div>
 		  	<p><a href="#header" data-role="button" data-icon="delete" data-rel="close">닫기</a></p>
 		  </div>
-	</div>
-	
+	</div>	
 	
 	<div data-role="header" id="page" >
 		<a href="#left" data-role="button" data-icon="bars" data-ajax="false" class="ui-btn-left" data-iconpos="left" data-inline="true">메뉴</a>
@@ -75,21 +74,35 @@
 		</form>
 		</div>
 		
-		<form data-mini="true">
-		     <label for="number-pattern">취득가액</label>
-			 <input type="number" name="number" pattern="[0-9]*" id="number-pattern" value="" data-mini="true">	
-			 <label for="number-pattern">양도가액</label>
-			 <input type="number" name="number" pattern="[0-9]*" id="number-pattern" value="" data-mini="true">
-			 <label for="number-pattern">소요경비</label>
-			 <input type="number" name="number" pattern="[0-9]*" id="number-pattern" value="" data-mini="true">
-			 <label for="date">취득일자</label>
-			 <input type="date" name="date" id="date" value="" data-mini="true">
-			 <label for="date">양도일자</label>
-			 <input type="date" name="date" id="date" value="" data-mini="true">			 
+<!-- 		<form data-mini="true"> -->
+<!-- 		     <label for="number-pattern">취득가액</label> -->
+<!-- 			 <input type="number" name="number1" pattern="[0-9]*" id="number-pattern1" value="" data-mini="true">	 -->
+<!-- 			 <label for="number-pattern">양도가액</label> -->
+<!-- 			 <input type="number" name="number2" pattern="[0-9]*" id="number-pattern2" value="" data-mini="true"> -->
+<!-- 			 <label for="number-pattern">소요경비</label> -->
+<!-- 			 <input type="number" name="number3" pattern="[0-9]*" id="number-pattern3" value="" data-mini="true"> -->
+<!-- 			 <label for="date">취득일자</label> -->
+<!-- 			 <input type="date" name="date1" id="date1" value="" data-mini="true"> -->
+<!-- 			 <label for="date">양도일자</label> -->
+<!-- 			 <input type="date" name="date2" id="date2" value="" data-mini="true">			  -->
+<!-- 		</form> -->
+		<form>
+		<div class="ui-field-contain">
+			<label for="fname2">취득가액</label>
+			<input type="number" name="number1" pattern="[0-9]*" id="number-pattern1" value="" data-mini="true">
+			<label for="lname">양도가액</label>
+			<input type="number" name="number2" pattern="[0-9]*" id="number-pattern2" value="" data-mini="true">
+			<label for="lname">소요경비</label>
+			<input type="number" name="number3" pattern="[0-9]*" id="number-pattern3" value="" data-mini="true">
+			<label for="lname">취득일자</label>
+			<input type="date" name="date1" id="date1" value="" data-mini="true">
+			<label for="lname">양도일자</label>
+			<input type="date" name="date2" id="date2" value="" data-mini="true">
+		  </div>
 		</form>
 		
 		<div>
-			<a href="aaa()" data-role="button" data-icon="action" data-mini="true">양도소득세계산</a>	
+			<a href="#" data-role="button" data-icon="action" data-mini="true" onclick="aaa()">양도소득세계산</a>	
 		</div>
 		
 		<div data-role="navbar" data-iconpos="left">
