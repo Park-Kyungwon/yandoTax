@@ -40,7 +40,7 @@
 	</div>	
 	
 	<form>
-			<fieldset data-role="controlgroup" data-type="horizontal">
+			<fieldset data-role="controlgroup" data-type="horizontal" data-mini="true">
 				<input type="radio" name="rdoType" id="rdoType1" value="on" checked="checked">
 				<label for="rdoType1">주택</label>
 				<input type="radio" name="rdoType" id="rdoType2" value="off">
@@ -52,16 +52,7 @@
 	
 		<div>
 		<form>
-			<fieldset data-role="controlgroup" data-type="horizontal">
-				<input type="radio" name="rdoNum" id="rdoNum1" value="on" checked="checked">
-				<label for="rdoNum1">1주택</label>
-				<input type="radio" name="rdoNum" id="rdoNum2" value="off">
-				<label for="rdoNum2">2주택</label>
-				<input type="radio" name="rdoNum" id="rdoNum3" value="other">
-				<label for="rdoNum3">2주택 이상</label>
-			</fieldset>
-	
-			<fieldset data-role="controlgroup" data-type="horizontal">
+			<fieldset data-role="controlgroup" data-type="horizontal" data-mini="true">
 				<input type="checkbox" name="chkEtc" id="chkEtc1" value="off">
 				<label for="chkEtc1">조정대상지역</label>
 				<input type="checkbox" name="chkEtc" id="chkEtc2" value="off">
@@ -70,29 +61,43 @@
 				<label for="chkEtc3">임대사업자</label>				
 			</fieldset>
 	
+			<fieldset data-role="controlgroup" data-mini="true">			
+			    <select name="select-native-8" id="select-native-8" data-iconpos="left">
+			        <option value="#">1주택</option>
+			        <option value="#">2주택</option>
+			        <option value="#">이상</option>
+			    </select>		
+			</fieldset>	
+	
 			<label>
-				<input type="checkbox" name="chkJnTn">공동명의
+				<input type="checkbox" name="chkJnTn" data-mini="true">공동명의
 			</label>
 		</form>
 		</div>
 		
-		<form>
+		<form data-mini="true">
 		     <label for="number-pattern">취득가액</label>
-			 <input type="number" name="number" pattern="[0-9]*" id="number-pattern" value="">	
+			 <input type="number" name="number" pattern="[0-9]*" id="number-pattern" value="" data-mini="true">	
 			 <label for="number-pattern">양도가액</label>
-			 <input type="number" name="number" pattern="[0-9]*" id="number-pattern" value="">
+			 <input type="number" name="number" pattern="[0-9]*" id="number-pattern" value="" data-mini="true">
 			 <label for="number-pattern">소요경비</label>
-			 <input type="number" name="number" pattern="[0-9]*" id="number-pattern" value="">
+			 <input type="number" name="number" pattern="[0-9]*" id="number-pattern" value="" data-mini="true">
 			 <label for="date">취득일자</label>
-			 <input type="date" name="date" id="date" value="">
+			 <input type="date" name="date" id="date" value="" data-mini="true">
 			 <label for="date">양도일자</label>
-			 <input type="date" name="date" id="date" value="">			 
+			 <input type="date" name="date" id="date" value="" data-mini="true">			 
 		</form>
 		
 		<div>
-			<a href="#" data-role="button" data-icon="arrow-r">양도소득세계산</a>	
+			<a href="#" data-role="button" data-icon="action" data-mini="true">양도소득세계산</a>	
 		</div>
-	
+
+		<div>
+			<input type="button" data-inline="true" data-icon="back" data-mini="true" value="뒤로">
+			<input type="button" data-inline="true" data-icon="refresh" data-mini="true" value="초기화">
+			<input type="button" data-inline="true" data-icon="arrow-u" data-mini="true" style="align:right; float:right" value="맨위로">
+		</div>	
+		
 		<div data-role="footer">
 			<h2>Footer 입니다.</h2>
 		</div>
