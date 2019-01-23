@@ -10,17 +10,15 @@
 <script src="js/calcYando.js"></script>
 <script src="js/basicCalc.js"></script>
  <style type="text/css">
- #message
- {
-  background: #ffd;
-  border:1px solid #999999;
-  display: block;
-  font-weight: bold;
-  margin:10px;
-  text-align: right;
-  padding: 12px 10px;
- }
-
+	 #message {
+	  background: #ffd;
+	  border:1px solid #999999;
+	  display: block;
+	  font-weight: bold;
+	  margin:10px;
+	  text-align: right;
+	  padding: 12px 10px;
+	 }
  </style>
 </head>
 <body>	
@@ -142,7 +140,7 @@
 				<label for="chkEtc3">임대사업자</label>
 			</fieldset>
 			<fieldset data-role="controlgroup" data-type="versical" data-mini="true">
-				<select name="day" id="day">
+				<select name="day" id="day" data-iconpos="left">
 				  <option value="mon">1주택</option>
 				  <option value="tue">2주택</option>
 				  <option value="wed">2주택이상</option>
@@ -302,6 +300,12 @@
 		<!-- 동적 div 추가 -->
 		<div id="divCalcAcqRst">
 		</div>
+		
+		<p></p>
+		<div id="divbmtongLink" style="text-align:right">
+			<a href="http://www.bmtong.co.kr/web/charge_1_form.jsp" target="_blank" >법무통등기비용계산</a>	
+		</div>
+		<p></p>
 		
 		<div data-role="navbar" data-iconpos="left">
 		  <ul>
