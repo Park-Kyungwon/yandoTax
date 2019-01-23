@@ -50,28 +50,25 @@
 		</form>	
 	
 		<div>
-		<form>
 			<fieldset data-role="controlgroup" data-type="horizontal" data-mini="true">
 				<input type="checkbox" name="chkEtc" id="chkEtc1" value="off">
 				<label for="chkEtc1">조정대상지역</label>
 				<input type="checkbox" name="chkEtc" id="chkEtc2" value="off">
 				<label for="chkEtc2">2년실거주</label>
 				<input type="checkbox" name="chkEtc" id="chkEtc3" value="off">
-				<label for="chkEtc3">임대사업자</label>				
+				<label for="chkEtc3">임대사업자</label>
 			</fieldset>
-	
-			<fieldset data-role="controlgroup" data-mini="true">			
-			    <select name="select-native-8" id="select-native-8" data-iconpos="left">
-			        <option value="#">1주택</option>
-			        <option value="#">2주택</option>
-			        <option value="#">이상</option>
-			    </select>		
-			</fieldset>	
-	
+			<fieldset data-role="controlgroup" data-type="versical" data-mini="true">
+				<select name="day" id="day">
+				  <option value="mon">1주택</option>
+				  <option value="tue">2주택</option>
+				  <option value="wed">2주택이상</option>
+				</select>
+			</fieldset>
 			<label>
 				<input type="checkbox" name="chkJnTn" data-mini="true">공동명의
 			</label>
-		</form>
+		
 		</div>
 	
 		<form>
