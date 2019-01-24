@@ -78,7 +78,8 @@ function btnEqual() {
 }
 
 function btnBackspace() {
-
+	view = view.substring(0, view.length-1);
+	$("#message").text(view);	
 }
 
 function btnPoint() {
