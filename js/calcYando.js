@@ -82,10 +82,12 @@ function calcAcqTax(){
 
 function dispAcqTax(acqVal, acqTax, farmTaxAmt, totTaxAmt, acqRt){
 	//취득세표시
-	//엘리먼트 추가
+	//엘리먼트 추가	
 	var obj = document.getElementById("divCalcAcqRst");
-	obj.removeChild(obj.childNodes[0]);
-	
+	if(obj.hasChildNodes()){
+		obj.removeChild(obj.childNodes[0]);
+	}
+		
 	var newDIV = document.createElement("div");
 	newDIV.setAttribute("id", "divCalcAcqDtl");
 	newDIV.innerHTML = "<hr><hr>취득세 계산 결과";
@@ -102,7 +104,9 @@ function dispAcqTax(acqVal, acqTax, farmTaxAmt, totTaxAmt, acqRt){
 function initAcqTax(){	
 	$("#acqTaxAcqVal").val("");
 	var obj = document.getElementById("divCalcAcqRst");
-	obj.removeChild(obj.childNodes[0]);	
+	if(obj.hasChildNodes()){
+		obj.removeChild(obj.childNodes[0]);
+	}
 }
 
 function inputAddPeriod(inputId)
