@@ -39,8 +39,12 @@ function calcYandoTax(){
 }
 
 function calcAcqTax(){
-	//취득세구하기
+	//취득세구하기	
 	acqVal = $("#acqTaxAcqVal").val();
+	acqVal = acqVal.toString();
+	acqVal = acqVal.replace(/,/gi, "");	
+	
+	acqVal = Number(acqVal);
 	
 	var ACQ_TAX_AMT_FST = 600000000;
 	var ACQ_TAX_AMT_SND = 900000000; 
@@ -82,14 +86,14 @@ function dispAcqTax(acqVal, acqTax, farmTaxAmt, totTaxAmt, acqRt){
 	var obj = document.getElementById("divCalcAcqRst");
 	obj.removeChild(obj.childNodes[0]);
 	
-	var newDIV = document.createElement("div");	
+	var newDIV = document.createElement("div");
+	newDIV.setAttribute("id", "divCalcAcqDtl");
 	newDIV.innerHTML = "<hr><hr>취득세 계산 결과";
-	newDIV.innerHTML += "<p>총취득세 : " + totTaxAmt + "</p>";
-	newDIV.innerHTML += "<p>취득가액 : " + acqVal + "</p>";
-	newDIV.innerHTML += "<p>취득세 : " + acqTax + "</p>";
-	newDIV.innerHTML += "<p>취득세율 : " + acqRt + "%</p>";
-	newDIV.innerHTML += "<p>지방교육세 : " + farmTaxAmt + "</p>";
-	newDIV.setAttribute("id", "divCalcAcqDtl");    
+	newDIV.innerHTML += "<p>총취득세 : " + $.number(totTaxAmt) + "</p>";
+	newDIV.innerHTML += "<p>취득가액 : " + $.number(acqVal) + "</p>";
+	newDIV.innerHTML += "<p>취득세 : " + $.number(acqTax) + "</p>";
+	newDIV.innerHTML += "<p>취득세율 : " + $.number(acqRt) + "%</p>";
+	newDIV.innerHTML += "<p>지방교육세 : " + $.number(farmTaxAmt) + "</p>";	
     newDIV.innerHTML += "<hr><hr>";    
     obj.appendChild(newDIV);
     
@@ -99,4 +103,14 @@ function initAcqTax(){
 	$("#acqTaxAcqVal").val("");
 	var obj = document.getElementById("divCalcAcqRst");
 	obj.removeChild(obj.childNodes[0]);	
+}
+
+function inputAddPeriod(inputId)
+{	
+	//alert("inputId : " + inputId);
+	var selId = "#" + inputId;
+    var nStr = $(selId).val();
+    //alert("nStr : " + $.number(nStr));
+    $(selId).val($.number(nStr));
+    
 }
