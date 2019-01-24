@@ -94,3 +94,9 @@ function dispAcqTax(acqVal, acqTax, farmTaxAmt, totTaxAmt, acqRt){
     obj.appendChild(newDIV);
     
 }
+
+function initAcqTax(){	
+	$("#acqTaxAcqVal").val("");
+	var obj = document.getElementById("divCalcAcqRst");
+	obj.removeChild(obj.childNodes[0]);	
+}
