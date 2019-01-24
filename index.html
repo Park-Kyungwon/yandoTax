@@ -7,8 +7,10 @@
 <link rel="stylesheet" href="jQueryMobile/jquery.mobile-1.4.5.min.css" />
 <script src="jQueryMobile/jquery-1.11.1.min.js"></script>
 <script src="jQueryMobile/jquery.mobile-1.4.5.min.js"></script>
+<script src="jQueryMobile/jquery.number.min.js"></script>
 <script src="js/calcYando.js"></script>
 <script src="js/basicCalc.js"></script>
+
  <style type="text/css">
 	 #message {
 	  background: #ffd;
@@ -308,7 +310,7 @@
 		<form>
 		<div class="ui-field-contain">
 			<label for="fname2">취득가액</label>
-			<input type="number" name="acqTaxAcqVal" pattern="[0-9]*" id="acqTaxAcqVal" value="" data-mini="true">			
+			<input type="text" name="acqTaxAcqVal" pattern="[0-9]*" id="acqTaxAcqVal" value="" data-mini="true" style="text-align:right;" onkeyup="inputAddPeriod('acqTaxAcqVal')">			
 		  </div>
 		</form>
 		
