@@ -60,7 +60,7 @@ function calcAcqTax(){
 		acqTax = acqVal * ACQ_TAX_RT_SND;
 		acqRt = ACQ_TAX_RT_SND * 100;
 		
-	} if(acqVal > ACQ_TAX_AMT_FST){
+	} else if(acqVal > ACQ_TAX_AMT_FST){
 		acqTax = acqVal * ACQ_TAX_RT_FST;
 		acqRt = ACQ_TAX_RT_FST * 100;
 		
