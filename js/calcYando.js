@@ -44,8 +44,16 @@ function calcYandoTax(){
 	jntTncyDvCd = $("#chkJntTncy").is(":checked");
 	
 	acqVal = $("#acqVal").val();
+	acqVal = acqVal.toString();
+	acqVal = acqVal.replace(/,/gi, "");
+	
 	trnsVal = $("#trnsVal").val();
+	trnsVal = trnsVal.toString();
+	trnsVal = trnsVal.replace(/,/gi, "");
+	
 	reqExpnsVal = $("#reqExpnsVal").val();
+	reqExpnsVal = reqExpnsVal.toString();
+	reqExpnsVal = reqExpnsVal.replace(/,/gi, "");
 	
 	acqDate = $("#acqDate").val();
 	trnsDate = $("#trnsDate").val();
