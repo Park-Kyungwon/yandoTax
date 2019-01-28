@@ -12,7 +12,7 @@
 <script src="js/basicCalc.js"></script>
 
  <style type="text/css">
-	 #message {
+	 .calPanel {
 	  background: #ffd;
 	  border:1px solid #999999;
 	  display: block;
@@ -20,6 +20,21 @@
 	  margin:10px;
 	  text-align: right;
 	  padding: 12px 10px;
+	 }
+	 
+	 .bodyLabel{
+	 	color:#333333;
+/* 	 	font-family:Impact, Charcoal, sans-serif; */
+		font-family:맑은고딕;
+		font-weight:bold;
+		
+	 }
+	 .calcResult{
+ 	 	font-family:맑은고딕;
+ 	 	font-size:14px;
+ 	 	color:#225492; 
+/*  	 	font-family:Georgia,serif; */
+ 		font-weight:bold;
 	 }
  </style>
 </head>
@@ -59,65 +74,65 @@
 	<div data-role="panel" id="panCalc" data-dismissible="false" data-display="overlay" data-position="right"> 
 		  <h1>패널계산기</h1>
 		    <p>
-				<label id="message">0</label>
+				<label id="message0" class="calPanel">0</label>
 			</p>
 		
 			<div class="ui-grid-c">
 				<div class="ui-block-a">
-					<a href="#" data-role="button" onclick="btnClear();">C</a>
+					<a href="#" data-role="button" onclick="btnClear('message0');">C</a>
 				</div>
 				<div class="ui-block-b">
-					<a href="#" data-role="button" onclick="btnBackspace();">&lt;</a>
+					<a href="#" data-role="button" onclick="btnBackspace('message0');">&lt;</a>
 				</div>
 		
 				<div class="ui-block-a">
-					<a href="#" data-role="button" onclick="btnNumber(7);">7</a>
+					<a href="#" data-role="button" onclick="btnNumber('message0',7);">7</a>
 				</div>
 				<div class="ui-block-b">
-					<a href="#" data-role="button" onclick="btnNumber(8);">8</a>
+					<a href="#" data-role="button" onclick="btnNumber('message0',8);">8</a>
 				</div>
 				<div class="ui-block-c">
-					<a href="#" data-role="button" onclick="btnNumber(9);">9</a>
+					<a href="#" data-role="button" onclick="btnNumber('message0',9);">9</a>
 				</div>
 				<div class="ui-block-d">
 					<a href="#" data-role="button" onclick="btnDivide();">/</a>
 				</div>
 		
 				<div class="ui-block-a">
-					<a href="#" data-role="button" onclick="btnNumber(4);">4</a>
+					<a href="#" data-role="button" onclick="btnNumber('message0',4);">4</a>
 				</div>
 				<div class="ui-block-b">
-					<a href="#" data-role="button" onclick="btnNumber(5);">5</a>
+					<a href="#" data-role="button" onclick="btnNumber('message0',5);">5</a>
 				</div>
 				<div class="ui-block-c">
-					<a href="#" data-role="button" onclick="btnNumber(6);">6</a>
+					<a href="#" data-role="button" onclick="btnNumber('message0',6);">6</a>
 				</div>
 				<div class="ui-block-d">
 					<a href="#" data-role="button" onclick="btnMulti();">*</a>
 				</div>
 		
 				<div class="ui-block-a">
-					<a href="#" data-role="button" onclick="btnNumber(1);">1</a>
+					<a href="#" data-role="button" onclick="btnNumber('message0',1);">1</a>
 				</div>
 				<div class="ui-block-b">
-					<a href="#" data-role="button" onclick="btnNumber(2);">2</a>
+					<a href="#" data-role="button" onclick="btnNumber('message0',2);">2</a>
 				</div>
 				<div class="ui-block-c">
-					<a href="#" data-role="button" onclick="btnNumber(3);">3</a>
+					<a href="#" data-role="button" onclick="btnNumber('message0',3);">3</a>
 				</div>
 				<div class="ui-block-d">
 					<a href="#" data-role="button" onclick="btnMinus();">-</a>
 				</div>
 		
 				<div class="ui-block-a">
-					<a href="#" data-role="button" onclick="btnNumber(0);">0</a>
+					<a href="#" data-role="button" onclick="btnNumber('message0',0);">0</a>
 				</div>
 		
 				<div class="ui-block-b">
-					<a href="#" data-role="button" onclick="btnPoint();">.</a>
+					<a href="#" data-role="button" onclick="btnPoint('message0');">.</a>
 				</div>
 				<div class="ui-block-c">
-					<a href="#" data-role="button" onclick="btnEqual();">=</a>
+					<a href="#" data-role="button" onclick="btnEqual('message0');">=</a>
 				</div>
 				<div class="ui-block-d">
 					<a href="#" data-role="button" onclick="btnPlus();">+</a>
@@ -166,11 +181,11 @@
 	
 		<form>
 		<div class="ui-field-contain">
-			<label for="fname2">취득가액</label>
+			<label for="fname2" class="bodyLabel">취득가액</label>
 			<input type="number" name="acqVal" pattern="[0-9]*" id="acqVal" value="" data-mini="true">
-			<label for="lname">양도가액</label>
+			<label for="lname" class="bodyLabel">양도가액</label>
 			<input type="number" name="trnsVal" pattern="[0-9]*" id="trnsVal" value="" data-mini="true">
-			<label for="lname">소요경비</label>
+			<label for="lname" class="bodyLabel">소요경비</label>
 			<input type="number" name="number3" pattern="[0-9]*" id="number-pattern3" value="" data-mini="true">
 			<label for="lname">취득일자</label>
 			<input type="date" name="acqDate" id="acqDate" value="" data-mini="true">
@@ -237,65 +252,65 @@
 		<div data-role="panel" id="panCalc" data-dismissible="false" data-display="overlay" data-position="right"> 
 			  <h1>패널계산기</h1>
 			  <p>
-				<label id="message">0</label>
+				<label id="message1" class="calPanel">0</label>
 			</p>
 		
 			<div class="ui-grid-c">
 				<div class="ui-block-a">
-					<a href="#" data-role="button" onclick="btnClear();">C</a>
+					<a href="#" data-role="button" onclick="btnClear('message1');">C</a>
 				</div>
 				<div class="ui-block-b">
-					<a href="#" data-role="button" onclick="btnBackspace();">&lt;</a>
+					<a href="#" data-role="button" onclick="btnBackspace('message1');">&lt;</a>
 				</div>
 		
 				<div class="ui-block-a">
-					<a href="#" data-role="button" onclick="btnNumber(7);">7</a>
+					<a href="#" data-role="button" onclick="btnNumber('message1', 7);">7</a>
 				</div>
 				<div class="ui-block-b">
-					<a href="#" data-role="button" onclick="btnNumber(8);">8</a>
+					<a href="#" data-role="button" onclick="btnNumber('message1', 8);">8</a>
 				</div>
 				<div class="ui-block-c">
-					<a href="#" data-role="button" onclick="btnNumber(9);">9</a>
+					<a href="#" data-role="button" onclick="btnNumber('message1', 9);">9</a>
 				</div>
 				<div class="ui-block-d">
-					<a href="#" data-role="button" onclick="btnDivide();">/</a>
+					<a href="#" data-role="button" onclick="btnDivide(');">/</a>
 				</div>
 		
 				<div class="ui-block-a">
-					<a href="#" data-role="button" onclick="btnNumber(4);">4</a>
+					<a href="#" data-role="button" onclick="btnNumber('message1', 4);">4</a>
 				</div>
 				<div class="ui-block-b">
-					<a href="#" data-role="button" onclick="btnNumber(5);">5</a>
+					<a href="#" data-role="button" onclick="btnNumber('message1', 5);">5</a>
 				</div>
 				<div class="ui-block-c">
-					<a href="#" data-role="button" onclick="btnNumber(6);">6</a>
+					<a href="#" data-role="button" onclick="btnNumber('message1', 6);">6</a>
 				</div>
 				<div class="ui-block-d">
 					<a href="#" data-role="button" onclick="btnMulti();">*</a>
 				</div>
 		
 				<div class="ui-block-a">
-					<a href="#" data-role="button" onclick="btnNumber(1);">1</a>
+					<a href="#" data-role="button" onclick="btnNumber('message1', 1);">1</a>
 				</div>
 				<div class="ui-block-b">
-					<a href="#" data-role="button" onclick="btnNumber(2);">2</a>
+					<a href="#" data-role="button" onclick="btnNumber('message1', 2);">2</a>
 				</div>
 				<div class="ui-block-c">
-					<a href="#" data-role="button" onclick="btnNumber(3);">3</a>
+					<a href="#" data-role="button" onclick="btnNumber('message1', 3);">3</a>
 				</div>
 				<div class="ui-block-d">
 					<a href="#" data-role="button" onclick="btnMinus();">-</a>
 				</div>
 		
 				<div class="ui-block-a">
-					<a href="#" data-role="button" onclick="btnNumber(0);">0</a>
+					<a href="#" data-role="button" onclick="btnNumber('message1', 0);">0</a>
 				</div>
 		
 				<div class="ui-block-b">
-					<a href="#" data-role="button" onclick="btnPoint();">.</a>
+					<a href="#" data-role="button" onclick="btnPoint('message1');">.</a>
 				</div>
 				<div class="ui-block-c">
-					<a href="#" data-role="button" onclick="btnEqual();">=</a>
+					<a href="#" data-role="button" onclick="btnEqual('message1');">=</a>
 				</div>
 				<div class="ui-block-d">
 					<a href="#" data-role="button" onclick="btnPlus();">+</a>
@@ -319,7 +334,7 @@
 		</div>
 		
 		<!-- 동적 div 추가 -->
-		<div id="divCalcAcqRst">
+		<div id="divCalcAcqRst" style="width:100%">		
 		</div>
 		
 		<p></p>
@@ -375,65 +390,65 @@
 		
 		<form>
 		<p>
-				<label id="message">0</label>
+				<label id="message" class="calPanel">0</label>
 			</p>
 		
 			<div class="ui-grid-c">
 				<div class="ui-block-a">
-					<a href="#" data-role="button" onclick="btnClear();">C</a>
+					<a href="#" data-role="button" onclick="btnClear('message');">C</a>
 				</div>
 				<div class="ui-block-b">
-					<a href="#" data-role="button" onclick="btnBackspace();">&lt;</a>
+					<a href="#" data-role="button" onclick="btnBackspace('message');">&lt;</a>
 				</div>
 		
 				<div class="ui-block-a">
-					<a href="#" data-role="button" onclick="btnNumber(7);">7</a>
+					<a href="#" data-role="button" onclick="btnNumber('message',7);">7</a>
 				</div>
 				<div class="ui-block-b">
-					<a href="#" data-role="button" onclick="btnNumber(8);">8</a>
+					<a href="#" data-role="button" onclick="btnNumber('message',8);">8</a>
 				</div>
 				<div class="ui-block-c">
-					<a href="#" data-role="button" onclick="btnNumber(9);">9</a>
+					<a href="#" data-role="button" onclick="btnNumber('message',9);">9</a>
 				</div>
 				<div class="ui-block-d">
 					<a href="#" data-role="button" onclick="btnDivide();">/</a>
 				</div>
 		
 				<div class="ui-block-a">
-					<a href="#" data-role="button" onclick="btnNumber(4);">4</a>
+					<a href="#" data-role="button" onclick="btnNumber('message',4);">4</a>
 				</div>
 				<div class="ui-block-b">
-					<a href="#" data-role="button" onclick="btnNumber(5);">5</a>
+					<a href="#" data-role="button" onclick="btnNumber('message',5);">5</a>
 				</div>
 				<div class="ui-block-c">
-					<a href="#" data-role="button" onclick="btnNumber(6);">6</a>
+					<a href="#" data-role="button" onclick="btnNumber('message',6);">6</a>
 				</div>
 				<div class="ui-block-d">
 					<a href="#" data-role="button" onclick="btnMulti();">*</a>
 				</div>
 		
 				<div class="ui-block-a">
-					<a href="#" data-role="button" onclick="btnNumber(1);">1</a>
+					<a href="#" data-role="button" onclick="btnNumber('message',1);">1</a>
 				</div>
 				<div class="ui-block-b">
-					<a href="#" data-role="button" onclick="btnNumber(2);">2</a>
+					<a href="#" data-role="button" onclick="btnNumber('message',2);">2</a>
 				</div>
 				<div class="ui-block-c">
-					<a href="#" data-role="button" onclick="btnNumber(3);">3</a>
+					<a href="#" data-role="button" onclick="btnNumber('message',3);">3</a>
 				</div>
 				<div class="ui-block-d">
 					<a href="#" data-role="button" onclick="btnMinus();">-</a>
 				</div>
 		
 				<div class="ui-block-a">
-					<a href="#" data-role="button" onclick="btnNumber(0);">0</a>
+					<a href="#" data-role="button" onclick="btnNumber('message',0);">0</a>
 				</div>
 		
 				<div class="ui-block-b">
-					<a href="#" data-role="button" onclick="btnPoint();">.</a>
+					<a href="#" data-role="button" onclick="btnPoint('message');">.</a>
 				</div>
 				<div class="ui-block-c">
-					<a href="#" data-role="button" onclick="btnEqual();">=</a>
+					<a href="#" data-role="button" onclick="btnEqual('message');">=</a>
 				</div>
 				<div class="ui-block-d">
 					<a href="#" data-role="button" onclick="btnPlus();">+</a>
