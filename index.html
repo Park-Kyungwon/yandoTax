@@ -10,33 +10,7 @@
 <script src="jQueryMobile/jquery.number.min.js"></script>
 <script src="js/calcYando.js"></script>
 <script src="js/basicCalc.js"></script>
-
- <style type="text/css">
-	 .calPanel {
-	  background: #ffd;
-	  border:1px solid #999999;
-	  display: block;
-	  font-weight: bold;
-	  margin:10px;
-	  text-align: right;
-	  padding: 12px 10px;
-	 }
-	 
-	 .bodyLabel{
-	 	color:#333333;
-/* 	 	font-family:Impact, Charcoal, sans-serif; */
-		font-family:맑은고딕;
-		font-weight:bold;
-		
-	 }
-	 .calcResult{
- 	 	font-family:맑은고딕;
- 	 	font-size:14px;
- 	 	color:#225492; 
-/*  	 	font-family:Georgia,serif; */
- 		font-weight:bold;
-	 }
- </style>
+<link href="css/style.css" type="text/css" rel="stylesheet">
 </head>
 <body>	
 	
@@ -181,6 +155,9 @@
 	
 		<form>
 		<div class="ui-field-contain">
+			<div class="lblGuide">
+				모든 입력 금액은 원단위 입니다.
+			</div>
 			<label for="fname2" class="bodyLabel">취득가액</label>
 			<input type="number" name="acqVal" pattern="[0-9]*" id="acqVal" value="" data-mini="true">
 			<label for="lname" class="bodyLabel">양도가액</label>
@@ -322,8 +299,11 @@
 			  </div>
 		</div>
 		
-		<form>
+		<form>		
 		<div class="ui-field-contain">
+			<div class="lblGuide">
+				입력 금액은 원단위 입니다.
+			</div>
 			<label for="fname2">취득가액</label>
 			<input type="text" name="acqTaxAcqVal" pattern="[0-9]*" id="acqTaxAcqVal" value="" data-mini="true" style="text-align:right;" onkeyup="inputAddPeriod('acqTaxAcqVal')">			
 		  </div>
