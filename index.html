@@ -159,11 +159,11 @@
 				모든 입력 금액은 원단위 입니다.
 			</div>
 			<label for="fname2" class="bodyLabel">취득가액</label>
-			<input type="number" name="acqVal" pattern="[0-9]*" id="acqVal" value="" data-mini="true">
+			<input type="text" name="acqVal" pattern="[0-9]*" id="acqVal" value="" data-mini="true" onkeyup="inputAddPeriod('acqVal')" style="text-align:right">
 			<label for="lname" class="bodyLabel">양도가액</label>
-			<input type="number" name="trnsVal" pattern="[0-9]*" id="trnsVal" value="" data-mini="true">
+			<input type="text" name="trnsVal" pattern="[0-9]*" id="trnsVal" value="" data-mini="true" onkeyup="inputAddPeriod('trnsVal')" style="text-align:right">
 			<label for="lname" class="bodyLabel">소요경비</label>
-			<input type="number" name="reqExpnsVal" pattern="[0-9]*" id="reqExpnsVal" value="" data-mini="true">
+			<input type="text" name="reqExpnsVal" pattern="[0-9]*" id="reqExpnsVal" value="" data-mini="true" onkeyup="inputAddPeriod('reqExpnsVal')" style="text-align:right">
 			<label for="lname">취득일자</label>
 			<input type="date" name="acqDate" id="acqDate" value="" data-mini="true">
 			<label for="lname">양도일자</label>
