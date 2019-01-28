@@ -1,44 +1,239 @@
-var acqVal = 0;	//취득가액
-var trnsVal = 0;	//양도가액
-
-var acqDate = new Date();		//취득일자
-var trnsDate = new Date();	//양도일자
+var ADJ_AREA_IDX = 0;
+var TWO_YEAR_REAL_IDX = 1;
+var LNT_LIC_IDX = 2;
+var RETENT_MTH = 24;		//보유개월수
+var HI_GRADE_AMT = 900000000;		//고가주택기준 9억
 
 function calcYandoTax(){
-	//alert("aaa");
-	/*
-	alert("number-pattern1.value : " + $("#number-pattern1").val());
-	alert("number-pattern2.value : " + $("#number-pattern2").val());
-	alert("number-pattern3.value : " + $("#number-pattern3").val());
-	alert("date1 : " + $("#date1").val());
-	alert("date2 : " + $("#date2").val());
-	*/
+	
+	var acqVal = 0;	//취득가액
+	var trnsVal = 0;	//양도가액
+	var reqExpnsVal = 0;	//소요경비
+	
+	var acqDate = new Date();		//취득일자
+	var trnsDate = new Date();	//양도일자
+	
+	var arrRealEstDvCd = new Array();		//부동산구분코드
+	
+	var arrEtcDvCd = new Array();		//기타정보
+	
+	var houseQty = "";			//보유갯수
+	var jntTncyDvCd = "";		//공동명의구분코드
+	
+	var obj = document.getElementById("divCalcRst");
+	while(obj.hasChildNodes()){
+		obj.removeChild(obj.childNodes[0]);
+	}
+	
+	$("input[name=rdoType]").each(
+			function(i){				
+				arrRealEstDvCd[i] = this.checked;
+				i++;
+			}			
+		);
+	
+	$("input[name=chkEtc]").each(
+			function(i){				
+				arrEtcDvCd[i] = this.checked;
+				i++;
+			}			
+		);
+	
+	houseQty = $("#selHseQty > option:selected").val();	
+	
+	jntTncyDvCd = $("#chkJntTncy").is(":checked");
+	
 	acqVal = $("#acqVal").val();
 	trnsVal = $("#trnsVal").val();
-	
-//	alert("acqVal : " + acqVal);
-//	alert("trnsVal : " + trnsVal);
+	reqExpnsVal = $("#reqExpnsVal").val();
 	
 	acqDate = $("#acqDate").val();
 	trnsDate = $("#trnsDate").val();
 	
-//	alert("acqDate : " + acqDate);
-//	alert("trnsDate : " + trnsDate);
+	var trnsObj = new Object();
+	trnsObj.arrRealEstDvCd = arrRealEstDvCd;
+	trnsObj.arrEtcDvCd = arrEtcDvCd;
+	trnsObj.houseQty = houseQty;
+	trnsObj.jntTncyDvCd = jntTncyDvCd;
+	trnsObj.acqVal = acqVal;
+	trnsObj.trnsVal = trnsVal;
+	trnsObj.reqExpnsVal = reqExpnsVal;
+	trnsObj.acqDate = acqDate;
+	trnsObj.trnsDate = trnsDate;
+		
+	//dispTrnsObj(trnsObj);
 	
+	trnsObj = calcTrnsTax(trnsObj);
+		
+	//dispCalcTrnsTax(trnsObj);
 	
+}
+
+function calcTrnsTax(trnsObj){
+	
+	console.log("calcTrnsTax start");
+	var arrRealEstDvCd = trnsObj.arrRealEstDvCd;
+	var arrEtcDvCd = trnsObj.arrEtcDvCd;
+	var houseQty = trnsObj.houseQty;
+	var acqVal = trnsObj.acqVal;
+	var trnsVal = trnsObj.trnsVal;		//양도가액
+	var reqExpnsVal = trnsObj.reqExpnsVal;
+	var acqDate = trnsObj.acqDate;
+	var trnsDate = trnsObj.trnsDate;
+	
+	var adjArea = arrEtcDvCd[ADJ_AREA_IDX];					//조정대상지역
+	var flgTwoYrRealRsdn = arrEtcDvCd[TWO_YEAR_REAL_IDX];		//2년실거주
+	var flgLentalLicn = arrEtcDvCd[LNT_LIC_IDX];				//임대사업자	
+	
+	var retnMth = mthDiff(acqDate, trnsDate);		//보유개월
+	
+	//일단 주택만 대상
+	
+	console.log("houseQty : " + houseQty 
+			+ "\n" + "flgTwoYrRealRsdn : " + flgTwoYrRealRsdn 
+			+ "\n" + "flgLentalLicn : " + flgLentalLicn
+			+ "\n" + "retnMth : " + retnMth
+			+ "\n" + "trnsVal : " + trnsVal
+			+ "\n" + "RETENT_MTH : " + RETENT_MTH
+			+ "\n" + "HI_GRADE_AMT : " + HI_GRADE_AMT
+			);
+	
+	if(houseQty == "1" && flgTwoYrRealRsdn && !flgLentalLicn 
+			&& retnMth > RETENT_MTH 
+			&& trnsVal <= HI_GRADE_AMT ){
+		console.log("비과세");
+		//비과세
+		//1주택, 2년실거주, 임대사업자아니고, 보유기간 24개월초과, 양도가액 9억미만
+		dispCalcTrnsNonTax(trnsObj);		
+		
+	} else {
+		//과세
+		console.log("과세");
+		if(retnMth > RETENT_MTH){
+			//보유개월 24개월 초과
+			if(trnsVal > HI_GRADE_AMT){
+				//9억초과 양도세 계산
+				
+			} else {
+				//9억이하 양도세
+				//세율따라 계산
+				
+			}
+			
+		} else {
+			//보유개월 24개월 미만
+			//세율에 따라 계산
+			
+		}
+		
+		dispCalcTrnsTaxTest(trnsObj);
+		
+	}
+
+	console.log("calcTrnsTax end");
+	
+}
+function dispCalcTrnsTaxTest(trnsObj){
+	
+	var trnsVal = trnsObj.trnsVal;
+	var acqVal = trnsObj.acqVal;
+	
+	var acqDate = trnsObj.acqDate;
+	var trnsDate = trnsObj.trnsDate;	
+	var retnMth = mthDiff(acqDate, trnsDate);
+	
+	var obj = document.getElementById("divCalcRst");
+	var newDIV = document.createElement("div");	
+	newDIV.setAttribute("id", "divCalcRstDtl");
+	newDIV.setAttribute("class", "calcResult");
+	
+	newDIV.innerHTML = "<hr>과세대상";	
+    newDIV.innerHTML += "<hr><hr>"; 
+//    newDIV.innerHTML += "realEstDvCd1 : " + realEstDvCd1 + "<br>";
+    newDIV.innerHTML += "acqVal : " + trnsObj.acqVal + "<br>";
+    newDIV.innerHTML += "trnsVal : " + trnsObj.trnsVal + "<br>";
+    newDIV.innerHTML += "reqExpnsVal : " + trnsObj.reqExpnsVal + "<br>";
+    newDIV.innerHTML += "acqDate : " + trnsObj.acqDate + "<br>";
+    newDIV.innerHTML += "trnsDate : " + trnsObj.trnsDate + "<br>";
+    newDIV.innerHTML += "보유개월 : " + retnMth + "<br>";
+    newDIV.innerHTML += "양도차익 : " + (trnsVal - acqVal) + "<br>";
+    
+    obj.appendChild(newDIV);
+	
+}
+
+function dispCalcTrnsTax(trnsObj){
+	
+	var acqDate = trnsObj.acqDate;
+	var trnsDate = trnsObj.trnsDate;	
+	var retnMth = mthDiff(acqDate, trnsDate);
 	
 	//엘리먼트 추가
 	var obj = document.getElementById("divCalcRst");
 	var newDIV = document.createElement("div");
 	
 	newDIV.innerHTML = "<hr>추가된 DIV 입니다";
-	newDIV.setAttribute("id", "divCalcRstDtl");    
+	newDIV.setAttribute("id", "divCalcRstDtl");
     newDIV.innerHTML += "<hr><hr>"; 
+//    newDIV.innerHTML += "realEstDvCd1 : " + realEstDvCd1 + "<br>";
+    newDIV.innerHTML += "acqVal : " + trnsObj.acqVal + "<br>";
+    newDIV.innerHTML += "trnsVal : " + trnsObj.trnsVal + "<br>";
+    newDIV.innerHTML += "reqExpnsVal : " + trnsObj.reqExpnsVal + "<br>";
+    newDIV.innerHTML += "acqDate : " + trnsObj.acqDate + "<br>";
+    newDIV.innerHTML += "trnsDate : " + trnsObj.trnsDate + "<br>";
+    newDIV.innerHTML += "보유개월 : " + retnMth + "<br>";
+    newDIV.innerHTML += "양도차익 : " + (trnsVal - acqVal) + "<br>";
+    
+    obj.appendChild(newDIV);
+    
+}
+
+function dispCalcTrnsNonTax(trnsObj){
+	//비과세표시
+	var acqDate = trnsObj.acqDate;
+	var trnsDate = trnsObj.trnsDate;	
+	var retnMth = mthDiff(acqDate, trnsDate);
+	
+	var trnsVal = trnsObj.trnsVal;
+	var acqVal = trnsObj.acqVal;
+	
+	//엘리먼트 추가
+	var obj = document.getElementById("divCalcRst");
+	var newDIV = document.createElement("div");
+	newDIV.setAttribute("id", "divCalcRstDtl");
+	newDIV.setAttribute("class", "calcResult");
+	
+	newDIV.innerHTML = "<hr><hr>취득세 계산 결과";	
+    newDIV.innerHTML += "<hr><hr>"; 
+    newDIV.innerHTML += "총양도세 : 비과세 입니다.<br>" ;
+
+    newDIV.innerHTML += "취득가액 : " + $.number(trnsObj.acqVal) + "<br>";    
+    newDIV.innerHTML += "양도가액 : " + $.number(trnsObj.trnsVal) + "<br>";
+    newDIV.innerHTML += "소요경비 : " + $.number(trnsObj.reqExpnsVal) + "<br>";
+    newDIV.innerHTML += "취득일자 : " + trnsObj.acqDate + "<br>";
+    newDIV.innerHTML += "양도일자 : " + trnsObj.trnsDate + "<br>";
+    newDIV.innerHTML += "보유개월 : " + retnMth + "<br>";
+    newDIV.innerHTML += "양도차익 : " + $.number(trnsVal - acqVal) + "<br>";
+    
     obj.appendChild(newDIV);
 	
 }
 
+function dispTrnsObj(trnsObj){
+	console.log("trnsObj.arrRealEstDvCd : " + trnsObj.arrRealEstDvCd);
+	console.log("trnsObj.arrEtcDvCd : " + trnsObj.arrEtcDvCd);
+	console.log("trnsObj.houseQty : " + trnsObj.houseQty);
+	console.log("trnsObj.jntTncyDvCd : " + trnsObj.jntTncyDvCd);
+	console.log("trnsObj.acqVal : " + trnsObj.acqVal);
+	console.log("trnsObj.trnsVal : " + trnsObj.trnsVal);
+	console.log("trnsObj.reqExpnsVal : " + trnsObj.reqExpnsVal);
+	console.log("trnsObj.acqDate : " + trnsObj.acqDate);
+	console.log("trnsObj.trnsDate : " + trnsObj.trnsDate);
+}
+
 function calcAcqTax(){
+	var acqVal = 0;
+	
 	//취득세구하기	
 	acqVal = $("#acqTaxAcqVal").val();
 	acqVal = acqVal.toString();
@@ -153,4 +348,40 @@ function inputAddPeriod(inputId)
     //alert("nStr : " + $.number(nStr));
     $(selId).val($.number(nStr));
     
+}
+
+function mthDiff(date1, date2){
+	
+	date1 = date1.replace(/-/gi, "");
+	date2 = date2.replace(/-/gi, "");
+	
+	date1 = new Date(date1.substr(0,4),date1.substr(4,2)-1,date1.substr(6,2)); 
+	date2 = new Date(date2.substr(0,4),date2.substr(4,2)-1,date2.substr(6,2));
+
+	var interval = date2 - date1;
+	var day = 1000*60*60*24;
+	var month = day*30;
+	var year = month*12;
+	
+	//console.log("기간 개월수: 약 " + parseInt(interval/month) + "개월");
+	return parseInt(interval/month);
+	
+}
+
+function yrDiff(date1, date2){
+	
+	date1 = date1.replace(/-/gi, "");
+	date2 = date2.replace(/-/gi, "");
+	
+	date1 = new Date(date1.substr(0,4),date1.substr(4,2)-1,date1.substr(6,2)); 
+	date2 = new Date(date2.substr(0,4),date2.substr(4,2)-1,date2.substr(6,2));
+
+	var interval = date2 - date1;
+	var day = 1000*60*60*24;
+	var month = day*30;
+	var year = month*12;
+	
+	//console.log("기간 개월수: 약 " + parseInt(interval/month) + "개월");
+	return parseInt(interval/year);
+	
 }
