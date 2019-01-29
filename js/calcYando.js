@@ -154,6 +154,11 @@ function dispCalcTrnsTaxTest(trnsObj){
 	var retnMth = mthDiff(acqDate, trnsDate);
 	
 	var obj = document.getElementById("divCalcRst");
+	
+	while(obj.hasChildNodes()){
+		obj.removeChild(obj.childNodes[0]);
+	}
+	
 	var newDIV = document.createElement("div");	
 	newDIV.setAttribute("id", "divCalcRstDtl");
 	newDIV.setAttribute("class", "ui-grid-c calcResult");
@@ -241,6 +246,12 @@ function dispCalcTrnsTaxTest(trnsObj){
     */
 	
     obj.appendChild(newDIV);
+    
+    var newDIVHr = document.createElement("div");
+    newDIVHr.setAttribute("id", "divHr");
+    newDIVHr.innerHTML = "<hr><hr>";
+    
+    obj.appendChild(newDIVHr);
 	
 }
 
@@ -414,4 +425,51 @@ function getGenTaxRtIdx(trnsProfit, trnsDate){
 		
 	}
 	
+}
+
+function initYandoTax(){
+	console.log("initYandoTax");
+	$("input:radio[name='rdoType']").removeAttr("checked");
+//	console.log($("#rdoType1").is(":checked"));
+//	console.log($("#rdoType2").is(":checked"));
+//	console.log($("#rdoType3").is(":checked"));
+	
+//	$("#rdoType1").prop("checked", true);
+//	$("#rdoType2").prop("checked", false);
+//	$("#rdoType3").prop("checked", true);
+//	$("input:radio[name='rdoType']:radio[value='other']").attr("checked", true);
+	
+//	$("input:checkbox[id='chkEtc1']").attr("checked", true);
+	
+	/*
+	$("input[name='chkEtc']").each(
+			function(){
+				$(this).attr("checked", false);
+			}
+		);
+	*/
+	
+//	$("#chkEtc1").attr("checked", "checked");
+//	$("#chkEtc2").attr("checked", "checked");
+//	$("#chkEtc3").attr("checked", "checked");
+	
+//	$("#chkEtc1").attr("checked", false);
+//	$("#chkEtc2").attr("checked", false);
+//	$("#chkEtc3").val("on");
+	
+	/*
+	$("#selHseQty").val("1");
+	$("#chkJntTncy").attr("checked", false);	
+	
+	$("#acqVal").val("");
+	$("#trnsVal").val("");
+	$("#reqExpnsVal").val("");
+	$("#acqDate").val("");
+	$("#trnsDate").val("");
+
+	var obj = document.getElementById("divCalcRst");
+	while(obj.hasChildNodes()){
+		obj.removeChild(obj.childNodes[0]);
+	}
+	*/
 }
