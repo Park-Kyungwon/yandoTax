@@ -16,15 +16,27 @@ var HOUSE_QTY_MORE_RATE = 20;
 
 var BASIC_DEDUCT_AMT = 2500000;	//기본공제금액
 
+var MAX_PRF_AMT = 500000001;			//최고과세구간
+
 //일반과세세율
 var arrGenTaxRt = new Array();
-arrGenTaxRt[0] = [0, 12000000, 6, 0, "20190101", "99991231"];
-arrGenTaxRt[1] = [12000001, 46000000, 15, 1080000, "20190101", "99991231"];
-arrGenTaxRt[2] = [46000001, 88000000, 24, 5220000, "20190101", "99991231"];
-arrGenTaxRt[3] = [88000001, 150000000, 35, 14900000, "20190101", "99991231"];
-arrGenTaxRt[4] = [150000001, 300000000, 38, 19400000, "20190101", "99991231"];
-arrGenTaxRt[5] = [300000001, 500000000, 40, 25400000, "20190101", "99991231"];
-arrGenTaxRt[6] = [500000001, 0, 42, 35400000, "20190101", "99991231"];
+
+//2019년이전기준
+arrGenTaxRt[0] = [0, 12000000, 6, 0, "19000101", "20181231"];
+arrGenTaxRt[1] = [12000001, 46000000, 15, 1080000, "19000101", "20181231"];
+arrGenTaxRt[2] = [46000001, 88000000, 24, 5220000, "19000101", "20181231"];
+arrGenTaxRt[3] = [88000001, 150000000, 35, 14900000, "19000101", "20181231"];
+arrGenTaxRt[4] = [150000001, 500000000, 38, 19400000, "19000101", "20181231"];
+arrGenTaxRt[5] = [500000001, 0, 40, 35400000, "19000101", "20181231"];
+
+//2019년이후
+arrGenTaxRt[6] = [0, 12000000, 6, 0, "20190101", "99991231"];
+arrGenTaxRt[7] = [12000001, 46000000, 15, 1080000, "20190101", "99991231"];
+arrGenTaxRt[8] = [46000001, 88000000, 24, 5220000, "20190101", "99991231"];
+arrGenTaxRt[9] = [88000001, 150000000, 35, 14900000, "20190101", "99991231"];
+arrGenTaxRt[10] = [150000001, 300000000, 38, 19400000, "20190101", "99991231"];
+arrGenTaxRt[11] = [300000001, 500000000, 40, 25400000, "20190101", "99991231"];
+arrGenTaxRt[12] = [500000001, 0, 42, 35400000, "20190101", "99991231"];
 
 function calcYandoTax(){
 	
@@ -117,6 +129,8 @@ function calcTrnsTax(trnsObj){
 	
 	var retnMth = mthDiff(acqDate, trnsDate);		//보유개월
 	
+	trnsObj.retnMth = retnMth;
+	
 	//일단 주택만 대상	
 	console.log("houseQty : " + houseQty 
 			+ "\n" + "flgTwoYrRealRsdn : " + flgTwoYrRealRsdn 
@@ -181,26 +195,90 @@ function dispCalcTrnsTaxTest(trnsObj){
 	var obj = document.getElementById("divCalcRst");
 	var newDIV = document.createElement("div");	
 	newDIV.setAttribute("id", "divCalcRstDtl");
-	newDIV.setAttribute("class", "calcResult");
+	newDIV.setAttribute("class", "ui-grid-c calcResult");
 	
+	newDIV.innerHTML = "<hr><hr>";
+	newDIV.innerHTML += "<p>과세대상</p>";
+	newDIV.innerHTML += "<div class='ui-block-a'>총양도세</div>";
+	newDIV.innerHTML += "<div class='ui-block-b textAlignRight'>" +$.number(trnsObj.totTaxAmt) + "원" + "</div>";
+	newDIV.innerHTML += "<div class='ui-block-c'></div>";
+	newDIV.innerHTML += "<div class='ui-block-d'></div>";
+
+	newDIV.innerHTML += "<div class='ui-block-a'>취득가액</div>";
+	newDIV.innerHTML += "<div class='ui-block-b textAlignRight'>" +$.number(trnsObj.acqVal) + "원" +"</div>";
+	newDIV.innerHTML += "<div class='ui-block-c'></div>";
+	newDIV.innerHTML += "<div class='ui-block-d'></div>";
+
+	newDIV.innerHTML += "<div class='ui-block-a'>양도가액</div>";
+	newDIV.innerHTML += "<div class='ui-block-b textAlignRight'>" +$.number(trnsObj.trnsVal) + "원" +"</div>";
+	newDIV.innerHTML += "<div class='ui-block-c'></div>";
+	newDIV.innerHTML += "<div class='ui-block-d'></div>";
+	
+	newDIV.innerHTML += "<div class='ui-block-a'>소요경비</div>";
+	newDIV.innerHTML += "<div class='ui-block-b textAlignRight'>" +$.number(trnsObj.reqExpnsVal) + "원" +"</div>";
+	newDIV.innerHTML += "<div class='ui-block-c'></div>";
+	newDIV.innerHTML += "<div class='ui-block-d'></div>";
+	
+	newDIV.innerHTML += "<div class='ui-block-a'>취득일자</div>";
+	newDIV.innerHTML += "<div class='ui-block-b textAlignRight'>" + trnsObj.acqDate + "</div>";
+	newDIV.innerHTML += "<div class='ui-block-c'></div>";
+	newDIV.innerHTML += "<div class='ui-block-d'></div>";
+	
+	newDIV.innerHTML += "<div class='ui-block-a'>양도일자</div>";
+	newDIV.innerHTML += "<div class='ui-block-b textAlignRight'>" + trnsObj.trnsDate + "</div>";
+	newDIV.innerHTML += "<div class='ui-block-c'></div>";
+	newDIV.innerHTML += "<div class='ui-block-d'></div>";
+	
+	newDIV.innerHTML += "<div class='ui-block-a'>보유개월</div>";
+	newDIV.innerHTML += "<div class='ui-block-b textAlignRight'>" + trnsObj.retnMth + "개월" + "</div>";
+	newDIV.innerHTML += "<div class='ui-block-c'></div>";
+	newDIV.innerHTML += "<div class='ui-block-d'></div>";
+	
+	newDIV.innerHTML += "<div class='ui-block-a'>양도차익</div>";
+	newDIV.innerHTML += "<div class='ui-block-b textAlignRight'>" +$.number(trnsObj.trnsProfit) + "원" +"</div>";
+	newDIV.innerHTML += "<div class='ui-block-c'></div>";
+	newDIV.innerHTML += "<div class='ui-block-d'></div>";
+	
+	newDIV.innerHTML += "<div class='ui-block-a'>과세표준</div>";
+	newDIV.innerHTML += "<div class='ui-block-b textAlignRight'>" +$.number(trnsObj.taxGenAmt) + "원" +"</div>";
+	newDIV.innerHTML += "<div class='ui-block-c'></div>";
+	newDIV.innerHTML += "<div class='ui-block-d'></div>";
+	
+	newDIV.innerHTML += "<div class='ui-block-a'>표준세율</div>";
+	newDIV.innerHTML += "<div class='ui-block-b textAlignRight'>" +$.number(trnsObj.taxRt) + "%" +"</div>";
+	newDIV.innerHTML += "<div class='ui-block-c'></div>";
+	newDIV.innerHTML += "<div class='ui-block-d'></div>";
+	
+	newDIV.innerHTML += "<div class='ui-block-a'>양도소득세</div>";
+	newDIV.innerHTML += "<div class='ui-block-b textAlignRight'>" +$.number(trnsObj.trnsTax) + "원" +"</div>";
+	newDIV.innerHTML += "<div class='ui-block-c textAlignRight'>(누진공제</div>";
+	newDIV.innerHTML += "<div class='ui-block-d'>" + $.number(trnsObj.prgDedAmt) + "원)" + "</div>";
+	
+	newDIV.innerHTML += "<div class='ui-block-a'>주민세</div>";
+	newDIV.innerHTML += "<div class='ui-block-b textAlignRight'>" +$.number(trnsObj.rsdTax) + "원" +"</div>";
+	newDIV.innerHTML += "<div class='ui-block-c'></div>";
+	newDIV.innerHTML += "<div class='ui-block-d'></div>";
+		
+	/*
 	newDIV.innerHTML = "<hr>과세대상";	
     newDIV.innerHTML += "<hr><hr>"; 
 //    newDIV.innerHTML += "realEstDvCd1 : " + realEstDvCd1 + "<br>";
-    newDIV.innerHTML += "취득가액 : " + trnsObj.acqVal + "<br>";
-    newDIV.innerHTML += "양도가액 : " + trnsObj.trnsVal + "<br>";
-    newDIV.innerHTML += "소요경비 : " + trnsObj.reqExpnsVal + "<br>";
-    newDIV.innerHTML += "취득일자 : " + trnsObj.acqDate + "<br>";
-    newDIV.innerHTML += "양도일자 : " + trnsObj.trnsDate + "<br>";
-    newDIV.innerHTML += "보유개월 : " + retnMth + "<br>";
+    newDIV.innerHTML += "취득가액 : " + $.number(trnsObj.acqVal) + "<br>";
+    newDIV.innerHTML += "양도가액 : " + $.number(trnsObj.trnsVal) + "<br>";
+    newDIV.innerHTML += "소요경비 : " + $.number(trnsObj.reqExpnsVal) + "<br>";
+    newDIV.innerHTML += "취득일자 : " + $.number(trnsObj.acqDate) + "<br>";
+    newDIV.innerHTML += "양도일자 : " + $.number(trnsObj.trnsDate) + "<br>";
+    newDIV.innerHTML += "보유개월 : " + $.number(retnMth) + "<br>";
     //newDIV.innerHTML += "양도차익 : " + (trnsVal - acqVal) + "<br>";
-    newDIV.innerHTML += "과세금액 : " + trnsObj.taxGenAmt + "<br>";
-    newDIV.innerHTML += "양도차익 : " + trnsObj.trnsProfit + "<br>";
-    newDIV.innerHTML += "표준세율 : " + trnsObj.taxRt + "<br>";
-    newDIV.innerHTML += "양도소득세 : " + trnsObj.trnsTax + "<br>";
-    newDIV.innerHTML += "누진공제액 : " + trnsObj.prgDedAmt + "<br>";    
-    newDIV.innerHTML += "주민세 : " + trnsObj.rsdTax + "<br>";    
-    newDIV.innerHTML += "총금액 : " + trnsObj.totTaxAmt + "<br>";
-    
+    newDIV.innerHTML += "과세금액 : " + $.number(trnsObj.taxGenAmt) + "<br>";
+    newDIV.innerHTML += "양도차익 : " + $.number(trnsObj.trnsProfit) + "<br>";
+    newDIV.innerHTML += "표준세율 : " + $.number(trnsObj.taxRt) + "<br>";
+    newDIV.innerHTML += "양도소득세 : " + $.number(trnsObj.trnsTax) + "<br>";
+    newDIV.innerHTML += "누진공제액 : " + $.number(trnsObj.prgDedAmt) + "<br>";    
+    newDIV.innerHTML += "주민세 : " + $.number(trnsObj.rsdTax) + "<br>";    
+    newDIV.innerHTML += "총금액 : " + $.number(trnsObj.totTaxAmt) + "<br>";
+    */
+	
     obj.appendChild(newDIV);
 	
 }
@@ -450,12 +528,12 @@ function calcGenTrnsTax(trnsObj){
 	if(jntTncyDvCd){
 		//공동명의
 		trnsProfit = Number(trnsProfit) / 2;
-		taxRtIdx = getGenTaxRtIdx(trnsProfit);
+		taxRtIdx = getGenTaxRtIdx(trnsProfit, trnsDate);
 		taxGenAmt = Number(trnsProfit) - Number(BASIC_DEDUCT_AMT);
 		
 	} else {
 		//단독명의			
-		taxRtIdx = getGenTaxRtIdx(trnsProfit);
+		taxRtIdx = getGenTaxRtIdx(trnsProfit, trnsDate);
 		taxGenAmt = Number(trnsProfit) - Number(BASIC_DEDUCT_AMT);
 		
 	}
@@ -498,16 +576,34 @@ function calcGenTrnsTax(trnsObj){
 	
 }
 
-function getGenTaxRtIdx(trnsProfit){
+function getGenTaxRtIdx(trnsProfit, trnsDate){
 	console.log("trnsProfit : " + trnsProfit);
 	var minAmt = 0;
 	var maxAmt = 0;
-	for(var i = 0; i < arrGenTaxRt.length; i++){
+	var fromDate;
+	var maxDate;
+	
+	trnsDate = trnsDate.replace(/-/gi, "");
+
+	var i = 0;
+	for(i = 0; i < arrGenTaxRt.length; i++){
 		minAmt = arrGenTaxRt[i][GEN_TAX_MIN_AMT_IDX];
 		maxAmt = arrGenTaxRt[i][GEN_TAX_MAX_AMT_IDX];
-		
-		if(trnsProfit >= minAmt && trnsProfit <= maxAmt){
-			return i;			
+		fromDate = arrGenTaxRt[i][GEN_TAX_FROM_DATE_IDX];
+		maxDate = arrGenTaxRt[i][GEN_TAX_TO_DATE_IDX];
+
+		if(trnsProfit >= MAX_PRF_AMT){
+			if(maxAmt == 0
+					&& trnsDate >= fromDate && trnsDate <= maxDate){
+
+				return i;
+			}
+		} else {
+			if(trnsProfit >= minAmt && trnsProfit <= maxAmt
+					&& trnsDate >= fromDate && trnsDate <= maxDate){
+				return i;
+			}
+			
 		}
 		
 	}
