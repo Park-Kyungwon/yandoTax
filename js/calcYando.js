@@ -1,8 +1,30 @@
-var ADJ_AREA_IDX = 0;
-var TWO_YEAR_REAL_IDX = 1;
-var LNT_LIC_IDX = 2;
-var RETENT_MTH = 24;		//보유개월수
+var ADJ_AREA_IDX = 0;			//조정대상지역inx
+var TWO_YEAR_REAL_IDX = 1;	//2년실거주idx
+var LNT_LIC_IDX = 2;				//임대사업자idx
+var RETENT_MTH = 24;			//보유개월수
 var HI_GRADE_AMT = 900000000;		//고가주택기준 9억
+
+var GEN_TAX_MIN_AMT_IDX = 0;
+var GEN_TAX_MAX_AMT_IDX = 1;
+var GEN_TAX_RT_IDX = 2;
+var GEN_TAX_DED_AMT_IDX = 3;
+var GEN_TAX_FROM_DATE_IDX = 4;
+var GEN_TAX_TO_DATE_IDX = 5;
+
+var HOUSE_QTY_TWO_RATE = 10;
+var HOUSE_QTY_MORE_RATE = 20;
+
+var BASIC_DEDUCT_AMT = 2500000;	//기본공제금액
+
+//일반과세세율
+var arrGenTaxRt = new Array();
+arrGenTaxRt[0] = [0, 12000000, 6, 0, "20190101", "99991231"];
+arrGenTaxRt[1] = [12000001, 46000000, 15, 1080000, "20190101", "99991231"];
+arrGenTaxRt[2] = [46000001, 88000000, 24, 5220000, "20190101", "99991231"];
+arrGenTaxRt[3] = [88000001, 150000000, 35, 14900000, "20190101", "99991231"];
+arrGenTaxRt[4] = [150000001, 300000000, 38, 19400000, "20190101", "99991231"];
+arrGenTaxRt[5] = [300000001, 500000000, 40, 25400000, "20190101", "99991231"];
+arrGenTaxRt[6] = [500000001, 0, 42, 35400000, "20190101", "99991231"];
 
 function calcYandoTax(){
 	
@@ -95,8 +117,7 @@ function calcTrnsTax(trnsObj){
 	
 	var retnMth = mthDiff(acqDate, trnsDate);		//보유개월
 	
-	//일단 주택만 대상
-	
+	//일단 주택만 대상	
 	console.log("houseQty : " + houseQty 
 			+ "\n" + "flgTwoYrRealRsdn : " + flgTwoYrRealRsdn 
 			+ "\n" + "flgLentalLicn : " + flgLentalLicn
@@ -114,9 +135,13 @@ function calcTrnsTax(trnsObj){
 		//1주택, 2년실거주, 임대사업자아니고, 보유기간 24개월초과, 양도가액 9억미만
 		dispCalcTrnsNonTax(trnsObj);		
 		
+	} else if ( trnsVal - acqVal <= 0 ){
+		//양도가액이 취득가액보다 작으면 비과세
+		dispCalcTrnsNonTax(trnsObj);
+		
 	} else {
 		//과세
-		console.log("과세");
+		console.log("과세");		
 		if(retnMth > RETENT_MTH){
 			//보유개월 24개월 초과
 			if(trnsVal > HI_GRADE_AMT){
@@ -124,13 +149,16 @@ function calcTrnsTax(trnsObj){
 				
 			} else {
 				//9억이하 양도세
-				//세율따라 계산
+				//1주택이상
+				//표준과세율대로 계산
+				trnsObj = calcGenTrnsTax(trnsObj);
 				
 			}
 			
 		} else {
 			//보유개월 24개월 미만
-			//세율에 따라 계산
+			//표준세율에 따라 계산						
+			trnsObj = calcGenTrnsTax(trnsObj);			
 			
 		}
 		
@@ -158,13 +186,20 @@ function dispCalcTrnsTaxTest(trnsObj){
 	newDIV.innerHTML = "<hr>과세대상";	
     newDIV.innerHTML += "<hr><hr>"; 
 //    newDIV.innerHTML += "realEstDvCd1 : " + realEstDvCd1 + "<br>";
-    newDIV.innerHTML += "acqVal : " + trnsObj.acqVal + "<br>";
-    newDIV.innerHTML += "trnsVal : " + trnsObj.trnsVal + "<br>";
-    newDIV.innerHTML += "reqExpnsVal : " + trnsObj.reqExpnsVal + "<br>";
-    newDIV.innerHTML += "acqDate : " + trnsObj.acqDate + "<br>";
-    newDIV.innerHTML += "trnsDate : " + trnsObj.trnsDate + "<br>";
+    newDIV.innerHTML += "취득가액 : " + trnsObj.acqVal + "<br>";
+    newDIV.innerHTML += "양도가액 : " + trnsObj.trnsVal + "<br>";
+    newDIV.innerHTML += "소요경비 : " + trnsObj.reqExpnsVal + "<br>";
+    newDIV.innerHTML += "취득일자 : " + trnsObj.acqDate + "<br>";
+    newDIV.innerHTML += "양도일자 : " + trnsObj.trnsDate + "<br>";
     newDIV.innerHTML += "보유개월 : " + retnMth + "<br>";
-    newDIV.innerHTML += "양도차익 : " + (trnsVal - acqVal) + "<br>";
+    //newDIV.innerHTML += "양도차익 : " + (trnsVal - acqVal) + "<br>";
+    newDIV.innerHTML += "과세금액 : " + trnsObj.taxGenAmt + "<br>";
+    newDIV.innerHTML += "양도차익 : " + trnsObj.trnsProfit + "<br>";
+    newDIV.innerHTML += "표준세율 : " + trnsObj.taxRt + "<br>";
+    newDIV.innerHTML += "양도소득세 : " + trnsObj.trnsTax + "<br>";
+    newDIV.innerHTML += "누진공제액 : " + trnsObj.prgDedAmt + "<br>";    
+    newDIV.innerHTML += "주민세 : " + trnsObj.rsdTax + "<br>";    
+    newDIV.innerHTML += "총금액 : " + trnsObj.totTaxAmt + "<br>";
     
     obj.appendChild(newDIV);
 	
@@ -391,5 +426,90 @@ function yrDiff(date1, date2){
 	
 	//console.log("기간 개월수: 약 " + parseInt(interval/month) + "개월");
 	return parseInt(interval/year);
+	
+}
+
+function calcGenTrnsTax(trnsObj){
+	
+	var arrRealEstDvCd = trnsObj.arrRealEstDvCd;
+	var arrEtcDvCd = trnsObj.arrEtcDvCd
+	var houseQty = trnsObj.houseQty;
+	var jntTncyDvCd = trnsObj.jntTncyDvCd;
+	var acqVal = trnsObj.acqVal;
+	var trnsVal = trnsObj.trnsVal;
+	var reqExpnsVal = trnsObj.reqExpnsVal;
+	var acqDate = trnsObj.acqDate;
+	var trnsDate = trnsObj.trnsDate;
+	var taxRtIdx = 0;
+	var taxGenAmt = 0;		//과세표준금액
+
+	var trnsProfit = 0;		//양도차익	
+	
+	trnsProfit = Number(trnsVal) - Number(acqVal) - Number(reqExpnsVal);
+	
+	if(jntTncyDvCd){
+		//공동명의
+		trnsProfit = Number(trnsProfit) / 2;
+		taxRtIdx = getGenTaxRtIdx(trnsProfit);
+		taxGenAmt = Number(trnsProfit) - Number(BASIC_DEDUCT_AMT);
+		
+	} else {
+		//단독명의			
+		taxRtIdx = getGenTaxRtIdx(trnsProfit);
+		taxGenAmt = Number(trnsProfit) - Number(BASIC_DEDUCT_AMT);
+		
+	}
+	
+	var taxRt = 0.0;		//과세율
+	taxRt = arrGenTaxRt[taxRtIdx][GEN_TAX_RT_IDX];
+	
+	//주택수
+	if(houseQty == "2"){
+		taxRt = Number(taxRt) + Number(HOUSE_QTY_TWO_RATE);  
+	} else if(houseQty == "3"){
+		taxRt = Number(taxRt) + Number(HOUSE_QTY_MORE_RATE);
+	} 
+	
+	var trnsTax = 0;			//양도세액
+	var prgDedAmt = 0;	//누진공제액
+	
+	prgDedAmt = arrGenTaxRt[taxRtIdx][GEN_TAX_DED_AMT_IDX];
+	trnsTax = Number(taxGenAmt) * Number(taxRt / 100) - Number(prgDedAmt);
+		
+	var rsdTax = 0.1;	//주민세	
+	var totTaxAmt = 0;
+	rsdTax =  Number(trnsTax * rsdTax);
+	totTaxAmt = Number(trnsTax) + Number(rsdTax);	
+	
+	if(jntTncyDvCd){
+		//공동명의
+		totTaxAmt = totTaxAmt * 2;
+	}
+	
+	trnsObj.taxGenAmt = taxGenAmt;
+	trnsObj.trnsProfit = trnsProfit;
+	trnsObj.taxRt = taxRt;
+	trnsObj.trnsTax = trnsTax;
+	trnsObj.prgDedAmt = prgDedAmt;
+	trnsObj.rsdTax = rsdTax;
+	trnsObj.totTaxAmt = totTaxAmt;
+	
+	return trnsObj;
+	
+}
+
+function getGenTaxRtIdx(trnsProfit){
+	console.log("trnsProfit : " + trnsProfit);
+	var minAmt = 0;
+	var maxAmt = 0;
+	for(var i = 0; i < arrGenTaxRt.length; i++){
+		minAmt = arrGenTaxRt[i][GEN_TAX_MIN_AMT_IDX];
+		maxAmt = arrGenTaxRt[i][GEN_TAX_MAX_AMT_IDX];
+		
+		if(trnsProfit >= minAmt && trnsProfit <= maxAmt){
+			return i;			
+		}
+		
+	}
 	
 }
