@@ -158,13 +158,16 @@ $(document).ready(function(){
 				<input type="checkbox" name="chkEtc" id="chkEtc3" value="off">
 				<label for="chkEtc3">임대사업자</label>
 			</fieldset>
-			<fieldset data-role="controlgroup" data-type="vertical" data-mini="true">
-				<select name="selHseQty" id="selHseQty" data-iconpos="left">
-				  <option value="1">1주택</option>
-				  <option value="2">2주택</option>
-				  <option value="3">2주택이상</option>
-				</select>
+			
+			<fieldset data-role="controlgroup" data-type="horizontal" data-mini="true">
+				<input type="radio" name="radQty" id="radQty1" value="1" checked="checked">
+				<label for="radQty1">1주택</label>
+				<input type="radio" name="radQty" id="radQty2" value="2">
+				<label for="radQty2">2주택</label>
+				<input type="radio" name="radQty" id="radQty3" value="3">
+				<label for="radQty3">그 이상</label>
 			</fieldset>
+
 			<label>
 				<input type="checkbox" name="chkJntTncy" id="chkJntTncy" data-mini="true">공동명의
 			</label>
