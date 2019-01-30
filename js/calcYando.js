@@ -427,39 +427,26 @@ function getGenTaxRtIdx(trnsProfit, trnsDate){
 	
 }
 
-function initYandoTax(){
-	console.log("initYandoTax");
-	$("input:radio[name='rdoType']").removeAttr("checked");
-//	console.log($("#rdoType1").is(":checked"));
-//	console.log($("#rdoType2").is(":checked"));
-//	console.log($("#rdoType3").is(":checked"));
-	
-//	$("#rdoType1").prop("checked", true);
-//	$("#rdoType2").prop("checked", false);
-//	$("#rdoType3").prop("checked", true);
-//	$("input:radio[name='rdoType']:radio[value='other']").attr("checked", true);
-	
-//	$("input:checkbox[id='chkEtc1']").attr("checked", true);
-	
-	/*
-	$("input[name='chkEtc']").each(
-			function(){
-				$(this).attr("checked", false);
+function initYandoTax(){ 
+	var rdoIdx = 0;
+	$('input:input:radio[name="rdoType"]').each(function() {			
+			if(rdoIdx == 0){
+				$(this).prop('checked', true);
+			} else {
+				$(this).prop('checked', false);
 			}
-		);
-	*/
+			rdoIdx++;
+	   }	).checkboxradio('refresh');
 	
-//	$("#chkEtc1").attr("checked", "checked");
-//	$("#chkEtc2").attr("checked", "checked");
-//	$("#chkEtc3").attr("checked", "checked");
+	$('input:checkbox[name="chkEtc"]').each(function() {
+	      $(this).attr('checked', true).prop('checked', false);
+	   }	).checkboxradio('refresh');
 	
-//	$("#chkEtc1").attr("checked", false);
-//	$("#chkEtc2").attr("checked", false);
-//	$("#chkEtc3").val("on");
+	var mySelect = $("select#selHseQty");
+	mySelect[0].selectedIndex = 0;
+	mySelect.selectmenu("refresh");
 	
-	/*
-	$("#selHseQty").val("1");
-	$("#chkJntTncy").attr("checked", false);	
+	$('input:checkbox[name="chkJntTncy"]').prop('checked', false).checkboxradio('refresh');
 	
 	$("#acqVal").val("");
 	$("#trnsVal").val("");
@@ -471,5 +458,5 @@ function initYandoTax(){
 	while(obj.hasChildNodes()){
 		obj.removeChild(obj.childNodes[0]);
 	}
-	*/
+	
 }
