@@ -138,7 +138,7 @@ $(document).ready(function(){
 	</div>
 	
 	
-<!-- 	<form> -->
+		<form>
 			<fieldset data-role="controlgroup" data-type="horizontal" data-mini="true">
 				<input type="radio" name="rdoType" id="rdoType1" value="on" checked="checked">
 				<label for="rdoType1">주택</label>
@@ -147,18 +147,7 @@ $(document).ready(function(){
 				<input type="radio" name="rdoType" id="rdoType3" value="other">
 				<label for="rdoType3">기타부동산</label>
 			</fieldset>
-<!-- 		</form>	 -->
 	
-		<div>
-			<fieldset data-role="controlgroup" data-type="horizontal" data-mini="true">
-				<input type="checkbox" name="chkEtc" id="chkEtc1" value="on">
-				<label for="chkEtc1">조정대상지역</label>
-				<input type="checkbox" name="chkEtc" id="chkEtc2" value="off">
-				<label for="chkEtc2">2년실거주</label>
-				<input type="checkbox" name="chkEtc" id="chkEtc3" value="off">
-				<label for="chkEtc3">임대사업자</label>
-			</fieldset>
-			
 			<fieldset data-role="controlgroup" data-type="horizontal" data-mini="true">
 				<input type="radio" name="radQty" id="radQty1" value="1" checked="checked">
 				<label for="radQty1">1주택</label>
@@ -167,13 +156,22 @@ $(document).ready(function(){
 				<input type="radio" name="radQty" id="radQty3" value="3">
 				<label for="radQty3">그 이상</label>
 			</fieldset>
+		
+			<fieldset data-role="controlgroup" data-type="horizontal" data-mini="true">
+				<input type="checkbox" name="chkEtc" id="chkEtc1" value="off">
+				<label for="chkEtc1">2년실거주</label>
+				<input type="checkbox" name="chkEtc" id="chkEtc2" value="on">
+				<label for="chkEtc2">조정대상지역</label>				
+				<input type="checkbox" name="chkEtc" id="chkEtc3" value="off">
+				<label for="chkEtc3">임대사업자</label>
+			</fieldset>
 
 			<label>
 				<input type="checkbox" name="chkJntTncy" id="chkJntTncy" data-mini="true">공동명의
 			</label>
-		
-		</div>
 	
+		</form>	
+		
 		<form>
 		<div class="ui-field-contain">
 			<div class="lblGuide">
