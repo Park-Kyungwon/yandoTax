@@ -34,7 +34,13 @@ function calcYandoTax(){
 			}			
 		);
 	
-	houseQty = $("#selHseQty > option:selected").val();	
+	$("input[name=radQty]").each(
+			function(){
+				if($(this).is(":checked")){
+					houseQty = $(this).val();					
+				}
+			}			
+		);
 	
 	jntTncyDvCd = $("#chkJntTncy").is(":checked");
 	
@@ -429,7 +435,7 @@ function getGenTaxRtIdx(trnsProfit, trnsDate){
 
 function initYandoTax(){ 
 	var rdoIdx = 0;
-	$('input:input:radio[name="rdoType"]').each(function() {			
+	$('input:radio[name="rdoType"]').each(function() {			
 			if(rdoIdx == 0){
 				$(this).prop('checked', true);
 			} else {
@@ -439,14 +445,20 @@ function initYandoTax(){
 	   }	).checkboxradio('refresh');
 	
 	$('input:checkbox[name="chkEtc"]').each(function() {
-	      $(this).attr('checked', true).prop('checked', false);
+	      $(this).prop('checked', false);
 	   }	).checkboxradio('refresh');
 	
-	var mySelect = $("select#selHseQty");
-	mySelect[0].selectedIndex = 0;
-	mySelect.selectmenu("refresh");
-	
-	$('input:checkbox[name="chkJntTncy"]').prop('checked', false).checkboxradio('refresh');
+	rdoIdx = 0;
+	$('input:radio[name="radQty"]').each(function() {			
+		if(rdoIdx == 0){
+			$(this).prop('checked', true);
+		} else {
+			$(this).prop('checked', false);
+		}
+		rdoIdx++;
+   }	).checkboxradio('refresh');
+		
+	$("#chkJntTncy").prop('checked', false).checkboxradio('refresh');
 	
 	$("#acqVal").val("");
 	$("#trnsVal").val("");
