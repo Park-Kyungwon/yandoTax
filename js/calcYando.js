@@ -362,7 +362,7 @@ function calcGenTrnsTax(trnsObj){
 	}
 	
 	var taxRt = 0.0;		//과세율
-	taxRt = arrGenTaxRt[taxRtIdx][GEN_TAX_RT_IDX];
+	taxRt = mstGenTaxRt[taxRtIdx][GEN_TAX_RT_IDX];
 	
 	//주택수
 	if(houseQty == "2"){
@@ -374,7 +374,7 @@ function calcGenTrnsTax(trnsObj){
 	var trnsTax = 0;			//양도세액
 	var prgDedAmt = 0;	//누진공제액
 	
-	prgDedAmt = arrGenTaxRt[taxRtIdx][GEN_TAX_DED_AMT_IDX];
+	prgDedAmt = mstGenTaxRt[taxRtIdx][GEN_TAX_DED_AMT_IDX];
 	trnsTax = Number(taxGenAmt) * Number(taxRt / 100) - Number(prgDedAmt);
 		
 	var rsdTax = 0.1;	//주민세	
@@ -409,11 +409,11 @@ function getGenTaxRtIdx(trnsProfit, trnsDate){
 	trnsDate = trnsDate.replace(/-/gi, "");
 
 	var i = 0;
-	for(i = 0; i < arrGenTaxRt.length; i++){
-		minAmt = arrGenTaxRt[i][GEN_TAX_MIN_AMT_IDX];
-		maxAmt = arrGenTaxRt[i][GEN_TAX_MAX_AMT_IDX];
-		fromDate = arrGenTaxRt[i][GEN_TAX_FROM_DATE_IDX];
-		maxDate = arrGenTaxRt[i][GEN_TAX_TO_DATE_IDX];
+	for(i = 0; i < mstGenTaxRt.length; i++){
+		minAmt = mstGenTaxRt[i][GEN_TAX_MIN_AMT_IDX];
+		maxAmt = mstGenTaxRt[i][GEN_TAX_MAX_AMT_IDX];
+		fromDate = mstGenTaxRt[i][GEN_TAX_FROM_DATE_IDX];
+		maxDate = mstGenTaxRt[i][GEN_TAX_TO_DATE_IDX];
 
 		if(trnsProfit >= MAX_PRF_AMT){
 			if(maxAmt == 0
