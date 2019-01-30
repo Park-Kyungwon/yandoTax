@@ -15,6 +15,17 @@
 <script src="js/constans.js"></script>
 <script src="js/util.js"></script>
 
+<script type="text/javascript">
+$(document).ready(function(){ 
+    $('selector').css('width', $(window).width()); 
+    $('selector').css('height', $(window).height()); 
+    $(window).resize(function() { 
+        $('selector').css('width', $(window).width()); 
+        $('selector').css('height', $(window).height()); 
+    }); 
+});
+</script>
+
 <link href="css/style.css" type="text/css" rel="stylesheet">
 </head>
 <body>	
@@ -125,7 +136,7 @@
 	</div>
 	
 	
-	<form>
+<!-- 	<form> -->
 			<fieldset data-role="controlgroup" data-type="horizontal" data-mini="true">
 				<input type="radio" name="rdoType" id="rdoType1" value="on" checked="checked">
 				<label for="rdoType1">주택</label>
@@ -134,7 +145,7 @@
 				<input type="radio" name="rdoType" id="rdoType3" value="other">
 				<label for="rdoType3">기타부동산</label>
 			</fieldset>
-		</form>	
+<!-- 		</form>	 -->
 	
 		<div>
 			<fieldset data-role="controlgroup" data-type="horizontal" data-mini="true">
@@ -146,7 +157,7 @@
 				<label for="chkEtc3">임대사업자</label>
 			</fieldset>
 			<fieldset data-role="controlgroup" data-type="vertical" data-mini="true">
-				<select name="day" id="selHseQty" data-iconpos="left">
+				<select name="selHseQty" id="selHseQty" data-iconpos="left">
 				  <option value="1">1주택</option>
 				  <option value="2">2주택</option>
 				  <option value="3">2주택이상</option>
