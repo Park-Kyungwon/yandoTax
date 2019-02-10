@@ -1,4 +1,4 @@
-
+//양도소득세계산 입력값가져오기
 function calcYandoTax(){
 	
 	var acqVal = 0;	//취득가액
@@ -78,6 +78,7 @@ function calcYandoTax(){
 	
 }
 
+//양도소득세 계산
 function calcTrnsTax(trnsObj){
 	
 	console.log("calcTrnsTax start");
@@ -138,7 +139,7 @@ function calcTrnsTax(trnsObj){
 			
 		} else {
 			//보유개월 24개월 미만
-			//표준세율에 따라 계산						
+			//표준세율에 따라 계산			
 			trnsObj = calcGenTrnsTax(trnsObj);			
 			
 		}
@@ -150,6 +151,8 @@ function calcTrnsTax(trnsObj){
 	console.log("calcTrnsTax end");
 	
 }
+
+//양도소득세 표시
 function dispCalcTrnsTaxTest(trnsObj){
 	
 	var trnsVal = trnsObj.trnsVal;
@@ -261,6 +264,7 @@ function dispCalcTrnsTaxTest(trnsObj){
 	
 }
 
+//양도소득세계산값 표시
 function dispCalcTrnsTax(trnsObj){
 	
 	var acqDate = trnsObj.acqDate;
@@ -287,6 +291,7 @@ function dispCalcTrnsTax(trnsObj){
     
 }
 
+//양도소득세 비과세 표시
 function dispCalcTrnsNonTax(trnsObj){
 	//비과세표시
 	var acqDate = trnsObj.acqDate;
@@ -318,6 +323,7 @@ function dispCalcTrnsNonTax(trnsObj){
 	
 }
 
+//양도소득세 표시
 function dispTrnsObj(trnsObj){
 	console.log("trnsObj.arrRealEstDvCd : " + trnsObj.arrRealEstDvCd);
 	console.log("trnsObj.arrEtcDvCd : " + trnsObj.arrEtcDvCd);
@@ -330,6 +336,7 @@ function dispTrnsObj(trnsObj){
 	console.log("trnsObj.trnsDate : " + trnsObj.trnsDate);
 }
 
+//일반과세 세율 계산
 function calcGenTrnsTax(trnsObj){
 	
 	var arrRealEstDvCd = trnsObj.arrRealEstDvCd;
@@ -346,23 +353,46 @@ function calcGenTrnsTax(trnsObj){
 
 	var trnsProfit = 0;		//양도차익	
 	
+	var retnMth = trnsObj.retnMth;		//보유기간
+	
 	trnsProfit = Number(trnsVal) - Number(acqVal) - Number(reqExpnsVal);
 	
-	if(jntTncyDvCd){
-		//공동명의
-		trnsProfit = Number(trnsProfit) / 2;
-		taxRtIdx = getGenTaxRtIdx(trnsProfit, trnsDate);
-		taxGenAmt = Number(trnsProfit) - Number(BASIC_DEDUCT_AMT);
+	var taxRt = 0.0;		//과세율
+	
+	if(retnMth <= POSSESSION_PERIOD_12){
+		//12개월이하
+		if(jntTncyDvCd){
+			//공동명의
+			trnsProfit = Number(trnsProfit) / 2;
+			taxGenAmt = Number(trnsProfit) - Number(BASIC_DEDUCT_AMT);
+			
+		} else {
+			//단독명의
+			taxGenAmt = Number(trnsProfit) - Number(BASIC_DEDUCT_AMT);
+			
+		}
 		
-	} else {
-		//단독명의			
-		taxRtIdx = getGenTaxRtIdx(trnsProfit, trnsDate);
-		taxGenAmt = Number(trnsProfit) - Number(BASIC_DEDUCT_AMT);
+		taxRt = mstEtcTaxRt[POSS_PERIOD_UND_12][HOS_TAX_RT_IDX];
+		
+	} else if(retnMth > POSSESSION_PERIOD_12){
+		//12개월 이상
+		if(jntTncyDvCd){
+			//공동명의
+			trnsProfit = Number(trnsProfit) / 2;
+			taxRtIdx = getGenTaxRtIdx(trnsProfit, trnsDate);
+			taxGenAmt = Number(trnsProfit) - Number(BASIC_DEDUCT_AMT);
+			
+			
+		} else {
+			//단독명의			
+			taxRtIdx = getGenTaxRtIdx(trnsProfit, trnsDate);
+			taxGenAmt = Number(trnsProfit) - Number(BASIC_DEDUCT_AMT);
+			
+		}
+		
+		taxRt = mstGenTaxRt[taxRtIdx][GEN_TAX_RT_IDX];
 		
 	}
-	
-	var taxRt = 0.0;		//과세율
-	taxRt = mstGenTaxRt[taxRtIdx][GEN_TAX_RT_IDX];
 	
 	//주택수
 	if(houseQty == "2"){
@@ -399,6 +429,7 @@ function calcGenTrnsTax(trnsObj){
 	
 }
 
+//양도소득세 과제세율 index 가져오기
 function getGenTaxRtIdx(trnsProfit, trnsDate){
 	console.log("trnsProfit : " + trnsProfit);
 	var minAmt = 0;
@@ -433,6 +464,7 @@ function getGenTaxRtIdx(trnsProfit, trnsDate){
 	
 }
 
+//화면 초기화
 function initYandoTax(){ 
 	var rdoIdx = 0;
 	$('input:radio[name="rdoType"]').each(function() {			
