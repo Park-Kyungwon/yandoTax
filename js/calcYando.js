@@ -82,20 +82,20 @@ function calcYandoTax(){
 function calcTrnsTax(trnsObj){
 	
 	console.log("calcTrnsTax start");
-	var arrRealEstDvCd = trnsObj.arrRealEstDvCd;
-	var arrEtcDvCd = trnsObj.arrEtcDvCd;
-	var houseQty = trnsObj.houseQty;
-	var acqVal = trnsObj.acqVal;
-	var trnsVal = trnsObj.trnsVal;		//양도가액
-	var reqExpnsVal = trnsObj.reqExpnsVal;
-	var acqDate = trnsObj.acqDate;
-	var trnsDate = trnsObj.trnsDate;
+	var arrRealEstDvCd = trnsObj.arrRealEstDvCd;			//주택구분코드
+	var arrEtcDvCd = trnsObj.arrEtcDvCd;					//기타구분코드
+	var houseQty = trnsObj.houseQty;						//주택수
+	var acqVal = trnsObj.acqVal;								//취득가액
+	var trnsVal = trnsObj.trnsVal;								//양도가액
+	var reqExpnsVal = trnsObj.reqExpnsVal;					//소요경비
+	var acqDate = trnsObj.acqDate;							//취득일자
+	var trnsDate = trnsObj.trnsDate;							//양도일자
 	
-	var adjArea = arrEtcDvCd[ADJ_AREA_IDX];					//조정대상지역
+	var adjArea = arrEtcDvCd[ADJ_AREA_IDX];							//조정대상지역
 	var flgTwoYrRealRsdn = arrEtcDvCd[TWO_YEAR_REAL_IDX];		//2년실거주
-	var flgLentalLicn = arrEtcDvCd[LNT_LIC_IDX];				//임대사업자	
+	var flgLentalLicn = arrEtcDvCd[LNT_LIC_IDX];						//임대사업자	
 	
-	var retnMth = mthDiff(acqDate, trnsDate);		//보유개월
+	var retnMth = mthDiff(acqDate, trnsDate);				//보유개월
 	
 	trnsObj.retnMth = retnMth;
 	
@@ -128,6 +128,7 @@ function calcTrnsTax(trnsObj){
 			//보유개월 24개월 초과
 			if(trnsVal > HI_GRADE_AMT){
 				//9억초과 양도세 계산
+				trnsObj = calcHiGrdTrnsTax(trnsObj);
 				
 			} else {
 				//9억이하 양도세
@@ -144,6 +145,7 @@ function calcTrnsTax(trnsObj){
 			
 		}
 		
+		//양도세결과 표시
 		dispCalcTrnsTaxTest(trnsObj);
 		
 	}
@@ -502,5 +504,324 @@ function initYandoTax(){
 	while(obj.hasChildNodes()){
 		obj.removeChild(obj.childNodes[0]);
 	}
+	
+}
+
+//고가주택 양도세 계산
+function calcHiGrdTrnsTax(trnsObj){
+	console.log("고가주택 양도세 계산");
+	//양도차익 = 양도가액 - 취득가 - 필요경비
+	
+	//고가주택 양도차익
+	//양도차익 * ((양도가액 - 9억) / 양도가액)
+	
+	//양도소득금액
+	//양도차익 - 장기보유특별공제
+	
+	//과세표준
+	//양도소득금액 - 양도소득기본공제
+	
+	//산출세액
+	//양도소득과세표준 * 양도소득세율 - 누진공제액
+	
+	console.log("calcHiGrdTrnsTax start");
+	var arrRealEstDvCd = trnsObj.arrRealEstDvCd;			//주택구분코드
+	var arrEtcDvCd = trnsObj.arrEtcDvCd;					//기타구분코드
+	var houseQty = trnsObj.houseQty;						//주택수
+	var acqVal = trnsObj.acqVal;								//취득가액
+	var trnsVal = trnsObj.trnsVal;								//양도가액
+	var reqExpnsVal = trnsObj.reqExpnsVal;					//소요경비
+	var acqDate = trnsObj.acqDate;							//취득일자
+	var trnsDate = trnsObj.trnsDate;							//양도일자
+	
+	var adjArea = arrEtcDvCd[ADJ_AREA_IDX];							//조정대상지역
+	var flgTwoYrRealRsdn = arrEtcDvCd[TWO_YEAR_REAL_IDX];		//2년실거주
+	var flgLentalLicn = arrEtcDvCd[LNT_LIC_IDX];						//임대사업자	
+	
+	var jntTncyDvCd = trnsObj.jntTncyDvCd;					//공동명의
+	
+	var retnMth = mthDiff(acqDate, trnsDate);				//보유개월
+	
+	trnsObj.retnMth = retnMth;
+	
+	//일단 주택만 대상	
+	console.log("houseQty : " + houseQty 
+			+ "\n" + "flgTwoYrRealRsdn : " + flgTwoYrRealRsdn 
+			+ "\n" + "flgLentalLicn : " + flgLentalLicn
+			+ "\n" + "retnMth : " + retnMth
+			+ "\n" + "trnsVal : " + trnsVal
+			+ "\n" + "RETENT_MTH : " + RETENT_MTH
+			+ "\n" + "HI_GRADE_AMT : " + HI_GRADE_AMT
+			+ "\n" + "acqVal : " + acqVal
+			+ "\n" + "reqExpnsVal : " + reqExpnsVal
+			);
+	
+	
+	//양도차익
+	var trnsProfit = 0;
+	trnsProfit = Number(trnsVal) - Number(acqVal) - Number(reqExpnsVal);
+	trnsProfit = Number(trnsProfit) * Number((Number(trnsVal) - Number(HI_GRADE_AMT)) / Number(trnsVal)) ;
+	trnsObj.trnsProfit = trnsProfit;
+	console.log("trnsProfit : " + trnsProfit);
+	
+	var lngTrmDedTaxRt = 0;		//장기보유특별공제세율
+	
+	lngTrmDedTaxRt = getLngTrmDedTaxRt(trnsObj);
+	trnsObj.lngTrmDedTaxRt = lngTrmDedTaxRt;		//장기보유특별공제세율
+	console.log("lngTrmDedTaxRt : " + lngTrmDedTaxRt);
+	
+	var lngTrmDedTaxAmt = 0;		//장기보유특별공제액
+	lngTrmDedTaxAmt = trnsProfit * lngTrmDedTaxRt / 100;
+	trnsObj.lngTrmDedTaxAmt = lngTrmDedTaxAmt;		//장기보유특별공제액
+	console.log("lngTrmDedTaxAmt : " + lngTrmDedTaxAmt);
+	
+	//양도소득금액
+	//양도차익 - 장기보유특별공제
+	var cptGainAmt = 0;		//양도소득금액
+	cptGainAmt = trnsProfit - lngTrmDedTaxAmt;
+	trnsObj.cptGainAmt = cptGainAmt;
+	console.log("lngTrmDedTaxRt : " + lngTrmDedTaxRt);
+	console.log("cptGainAmt : " + cptGainAmt);
+	
+	//과제표준세율
+	var taxRtIdx = 0;
+	taxRtIdx = getGenTaxRtIdx(cptGainAmt, trnsDate);
+	console.log("taxRtIdx : " + taxRtIdx);
+	
+	var taxRt = 0;
+	taxRt = mstGenTaxRt[taxRtIdx][GEN_TAX_RT_IDX];
+	
+	var taxGenAmt = 0;
+	if(jntTncyDvCd){
+		//공동명의
+		trnsProfit = Number(cptGainAmt) / 2;
+		taxRtIdx = getGenTaxRtIdx(cptGainAmt, trnsDate);
+		taxGenAmt = Number(cptGainAmt) - Number(BASIC_DEDUCT_AMT);
+		
+		
+	} else {
+		//단독명의			
+		taxRtIdx = getGenTaxRtIdx(cptGainAmt, trnsDate);
+		taxGenAmt = Number(cptGainAmt) - Number(BASIC_DEDUCT_AMT);
+		
+	}
+	
+	//주택수
+	if(houseQty == "2"){
+		taxRt = Number(taxRt) + Number(HOUSE_QTY_TWO_RATE);  
+	} else if(houseQty == "3"){
+		taxRt = Number(taxRt) + Number(HOUSE_QTY_MORE_RATE);
+	} 
+	
+	var trnsTax = 0;			//양도세액
+	var prgDedAmt = 0;	//누진공제액
+	
+	prgDedAmt = mstGenTaxRt[taxRtIdx][GEN_TAX_DED_AMT_IDX];
+	trnsTax = Number(taxGenAmt) * Number(taxRt / 100) - Number(prgDedAmt);
+		
+	var rsdTax = 0.1;	//주민세	
+	var totTaxAmt = 0;
+	rsdTax =  Number(trnsTax * rsdTax);
+	totTaxAmt = Number(trnsTax) + Number(rsdTax);	
+	
+	if(jntTncyDvCd){
+		//공동명의
+		totTaxAmt = totTaxAmt * 2;
+	}
+	
+	trnsObj.taxGenAmt = taxGenAmt;			//표준과세금액
+	trnsObj.trnsProfit = trnsProfit;				//양도차익
+	trnsObj.taxRt = taxRt;						//표준양도세율
+	trnsObj.trnsTax = trnsTax;					//양도세
+	trnsObj.prgDedAmt = prgDedAmt;		//누진공제액
+	trnsObj.rsdTax = rsdTax;					//주민세
+	trnsObj.totTaxAmt = totTaxAmt;			//총양도세액	
+	
+	console.log("trnsObj : " + trnsObj);
+		
+	//고액양도세결과 표시
+	dispCalcHignGrdTrnsTaxRst(trnsObj);
+	
+}
+
+//누진공제율구하기
+function getLngTrmDedTaxRt(trnsObj){
+
+	console.log("getLngTrmDedTaxRt start");
+	
+	var retnMth = 0;	
+	retnMth = trnsObj.retnMth;		//보유개월
+	
+	console.log("retnMth : " + retnMth);
+	var retnYr = 0;		//보유년수
+	if(Number(retnMth) % 12 == 0){
+		retnYr = parseInt(parseInt(Number(retnMth))/12 - 1);
+	} else {
+		retnYr = parseInt(parseInt(Number(retnMth))/12);
+	}
+	
+	console.log("retnYr : " + retnYr);
+	
+	var trnsDate = trnsObj.trnsDate;							//양도일자
+	trnsDate = trnsDate.replace(/-/gi, "");
+	
+	var lngTrmDedTaxRt = 0;		//장기보유공제세율
+	
+	var arrRealEstDvCd = trnsObj.arrRealEstDvCd;			//주택구분코드
+	
+	var realEstDvCdIdx = 0;
+	for(var i = 0; i < arrRealEstDvCd.lenth; i++){
+		if(arrRealEstDvCd[i]){
+			realEstDvCdIdx = i;
+			break;
+		}
+	}
+	
+	console.log("realEstDvCdIdx : " + realEstDvCdIdx);
+	
+	var lngTermDcdIdx = 0;
+	
+	if( realEstDvCdIdx == HOS_TAX_RT_IDX){
+		lngTermDcdIdx = LNG_POSS_ONE_HOS_YR_IDX;
+	} else if( realEstDvCdIdx == BLD_TAX_RT_IDX){
+		lngTermDcdIdx = LNG_POSS_MUT_HOS_YR_IDX;
+	} else if( realEstDvCdIdx == LND_TAX_RT_IDX){
+		lngTermDcdIdx = LNG_POSS_LENT_YR_IDX;
+	}
+
+	for(var i = 0; i < mstLngTermPossTaxRt.length; i++){
+		console.log("trnsDate : " + trnsDate);
+		console.log("mstLngTermPossTaxRt[i][LNG_POSS_EFCT_ST_IDX] : " + mstLngTermPossTaxRt[i][LNG_POSS_EFCT_ST_IDX]);
+		console.log("mstLngTermPossTaxRt[i][LNG_POSS_EFTC_ED_IDX] : " + mstLngTermPossTaxRt[i][LNG_POSS_EFTC_ED_IDX]);
+		console.log("mstLngTermPossTaxRt[i][LNG_POSS_ST_YR_IDX] : " + mstLngTermPossTaxRt[i][LNG_POSS_ST_YR_IDX]);
+		console.log("mstLngTermPossTaxRt[i][LNG_POSS_ED_YR_IDX] : " + mstLngTermPossTaxRt[i][LNG_POSS_ED_YR_IDX]);
+		console.log("mstLngTermPossTaxRt[i][LNG_POSS_EFCT_ST_IDX] >= trnsDate : " + (mstLngTermPossTaxRt[i][LNG_POSS_EFCT_ST_IDX] >= trnsDate));
+		console.log("trnsDate <= mstLngTermPossTaxRt[i][LNG_POSS_EFTC_ED_IDX] :" + (trnsDate <= mstLngTermPossTaxRt[i][LNG_POSS_EFTC_ED_IDX]));
+		console.log("mstLngTermPossTaxRt[i][LNG_POSS_ST_YR_IDX] >= retnYr :" + (mstLngTermPossTaxRt[i][LNG_POSS_ST_YR_IDX] >= retnYr));
+		console.log("retnYr < mstLngTermPossTaxRt[i][LNG_POSS_ED_YR_IDX] :" + (retnYr < mstLngTermPossTaxRt[i][LNG_POSS_ED_YR_IDX]));
+		if(mstLngTermPossTaxRt[i][LNG_POSS_EFCT_ST_IDX] <= trnsDate && trnsDate <= mstLngTermPossTaxRt[i][LNG_POSS_EFTC_ED_IDX]
+			&& mstLngTermPossTaxRt[i][LNG_POSS_ST_YR_IDX] <= retnYr && retnYr < mstLngTermPossTaxRt[i][LNG_POSS_ED_YR_IDX]
+			){
+			lngTrmDedTaxRt = mstLngTermPossTaxRt[i][lngTermDcdIdx];
+			return lngTrmDedTaxRt;
+		}
+		
+	}
+	
+	
+	
+}
+
+function dispCalcHignGrdTrnsTaxRst(trnsObj){
+	
+	console.log("dispCalcHignGrdTrnsTaxRst start");
+	
+	var trnsVal = trnsObj.trnsVal;
+	var acqVal = trnsObj.acqVal;
+	
+	var acqDate = trnsObj.acqDate;
+	var trnsDate = trnsObj.trnsDate;	
+	var retnMth = mthDiff(acqDate, trnsDate);
+	
+	var obj = document.getElementById("divCalcRst");
+	
+	while(obj.hasChildNodes()){
+		obj.removeChild(obj.childNodes[0]);
+	}
+	
+	var newDIV = document.createElement("div");	
+	newDIV.setAttribute("id", "divCalcRstDtl");
+	newDIV.setAttribute("class", "ui-grid-c calcResult");
+	
+	newDIV.innerHTML = "<hr><hr>";
+	newDIV.innerHTML += "<p>과세대상</p>";
+	newDIV.innerHTML += "<div class='ui-block-a'>총양도세</div>";
+	newDIV.innerHTML += "<div class='ui-block-b textAlignRight'>" +$.number(trnsObj.totTaxAmt) + "원" + "</div>";
+	newDIV.innerHTML += "<div class='ui-block-c'></div>";
+	newDIV.innerHTML += "<div class='ui-block-d'></div>";
+
+	newDIV.innerHTML += "<div class='ui-block-a'>취득가액</div>";
+	newDIV.innerHTML += "<div class='ui-block-b textAlignRight'>" +$.number(trnsObj.acqVal) + "원" +"</div>";
+	newDIV.innerHTML += "<div class='ui-block-c'></div>";
+	newDIV.innerHTML += "<div class='ui-block-d'></div>";
+
+	newDIV.innerHTML += "<div class='ui-block-a'>양도가액</div>";
+	newDIV.innerHTML += "<div class='ui-block-b textAlignRight'>" +$.number(trnsObj.trnsVal) + "원" +"</div>";
+	newDIV.innerHTML += "<div class='ui-block-c'></div>";
+	newDIV.innerHTML += "<div class='ui-block-d'></div>";
+	
+	newDIV.innerHTML += "<div class='ui-block-a'>소요경비</div>";
+	newDIV.innerHTML += "<div class='ui-block-b textAlignRight'>" +$.number(trnsObj.reqExpnsVal) + "원" +"</div>";
+	newDIV.innerHTML += "<div class='ui-block-c'></div>";
+	newDIV.innerHTML += "<div class='ui-block-d'></div>";
+	
+	newDIV.innerHTML += "<div class='ui-block-a'>취득일자</div>";
+	newDIV.innerHTML += "<div class='ui-block-b textAlignRight'>" + trnsObj.acqDate + "</div>";
+	newDIV.innerHTML += "<div class='ui-block-c'></div>";
+	newDIV.innerHTML += "<div class='ui-block-d'></div>";
+	
+	newDIV.innerHTML += "<div class='ui-block-a'>양도일자</div>";
+	newDIV.innerHTML += "<div class='ui-block-b textAlignRight'>" + trnsObj.trnsDate + "</div>";
+	newDIV.innerHTML += "<div class='ui-block-c'></div>";
+	newDIV.innerHTML += "<div class='ui-block-d'></div>";
+	
+	newDIV.innerHTML += "<div class='ui-block-a'>보유개월</div>";
+	newDIV.innerHTML += "<div class='ui-block-b textAlignRight'>" + trnsObj.retnMth + "개월" + "</div>";
+	newDIV.innerHTML += "<div class='ui-block-c'></div>";
+	newDIV.innerHTML += "<div class='ui-block-d'></div>";
+	
+	newDIV.innerHTML += "<div class='ui-block-a'>양도소득금액</div>";
+	newDIV.innerHTML += "<div class='ui-block-b textAlignRight'>" +$.number(trnsObj.cptGainAmt) + "원" +"</div>";
+	newDIV.innerHTML += "<div class='ui-block-c'></div>";
+	newDIV.innerHTML += "<div class='ui-block-d'></div>";
+	
+	
+	newDIV.innerHTML += "<div class='ui-block-a'>양도세과세대상금액</div>";
+	newDIV.innerHTML += "<div class='ui-block-b textAlignRight'>" +$.number(trnsObj.trnsProfit) + "원" +"</div>";
+	newDIV.innerHTML += "<div class='ui-block-c'></div>";
+	newDIV.innerHTML += "<div class='ui-block-d'></div>";
+	
+	newDIV.innerHTML += "<div class='ui-block-a'>장기보유특별공제세율</div>";
+	newDIV.innerHTML += "<div class='ui-block-b textAlignRight'>" +$.number(trnsObj.lngTrmDedTaxRt) + "%" +"</div>";
+	newDIV.innerHTML += "<div class='ui-block-c'></div>";
+	newDIV.innerHTML += "<div class='ui-block-d'></div>";
+	
+	newDIV.innerHTML += "<div class='ui-block-a'>장기보유특별공제액</div>";
+	newDIV.innerHTML += "<div class='ui-block-b textAlignRight'>" +$.number(trnsObj.lngTrmDedTaxAmt) + "원" +"</div>";
+	newDIV.innerHTML += "<div class='ui-block-c'></div>";
+	newDIV.innerHTML += "<div class='ui-block-d'></div>";	
+	
+	newDIV.innerHTML += "<div class='ui-block-a'>양도차익</div>";
+	newDIV.innerHTML += "<div class='ui-block-b textAlignRight'>" +$.number(trnsObj.trnsProfit) + "원" +"</div>";
+	newDIV.innerHTML += "<div class='ui-block-c'></div>";
+	newDIV.innerHTML += "<div class='ui-block-d'></div>";
+	
+	newDIV.innerHTML += "<div class='ui-block-a'>과세표준</div>";
+	newDIV.innerHTML += "<div class='ui-block-b textAlignRight'>" +$.number(trnsObj.taxGenAmt) + "원" +"</div>";
+	newDIV.innerHTML += "<div class='ui-block-c'></div>";
+	newDIV.innerHTML += "<div class='ui-block-d'></div>";
+	
+	newDIV.innerHTML += "<div class='ui-block-a'>표준세율</div>";
+	newDIV.innerHTML += "<div class='ui-block-b textAlignRight'>" +$.number(trnsObj.taxRt) + "%" +"</div>";
+	newDIV.innerHTML += "<div class='ui-block-c'></div>";
+	newDIV.innerHTML += "<div class='ui-block-d'></div>";
+	
+	newDIV.innerHTML += "<div class='ui-block-a'>양도소득세</div>";
+	newDIV.innerHTML += "<div class='ui-block-b textAlignRight'>" +$.number(trnsObj.trnsTax) + "원" +"</div>";
+	newDIV.innerHTML += "<div class='ui-block-c textAlignRight'>(누진공제</div>";
+	newDIV.innerHTML += "<div class='ui-block-d'>" + $.number(trnsObj.prgDedAmt) + "원)" + "</div>";
+	
+	newDIV.innerHTML += "<div class='ui-block-a'>주민세</div>";
+	newDIV.innerHTML += "<div class='ui-block-b textAlignRight'>" +$.number(trnsObj.rsdTax) + "원" +"</div>";
+	newDIV.innerHTML += "<div class='ui-block-c'></div>";
+	newDIV.innerHTML += "<div class='ui-block-d'></div>";
+	
+    obj.appendChild(newDIV);
+    
+    var newDIVHr = document.createElement("div");
+    newDIVHr.setAttribute("id", "divHr");
+    newDIVHr.innerHTML = "<hr><hr>";
+    
+    obj.appendChild(newDIVHr);	
 	
 }
